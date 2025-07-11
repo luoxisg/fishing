@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -468,15 +468,15 @@
                     barramundiDesc: "机会主义捕食者，大部分时间生活在淡水中，但会洄游到咸水繁殖。喜欢躲藏在遮蔽物下。",
                     barramundiDetails: `
                         <p><strong class="text-[var(--text-primary)]">科学分类：</strong> 尖吻鲈属，学名 *Lates calcarifer*。</p>
-                        <p><strong class="text-[var(--text-primary)]">栖息地与行为：</strong> 能适应广泛的盐度变化，喜欢躲藏在原木或其他物体下方。捕食时可能会成群结队。</p>
+                        <p><strong class="text-[var(--text-primary)]">栖息地与行为：：</strong> 能适应广泛的盐度变化，喜欢躲藏在原木或其他物体下方。捕食时可能会成群结队。</p>
                         <p><strong class="text-[var(--text-primary)]">食性与摄食习惯：：</strong> 机会主义捕食者。幼鱼吃甲壳类，成鱼几乎完全以鱼类为食。它们通过吸食的方式将食物整吞。</p>
                     `,
                     snapperName: "笛鲷 (Snapper)",
                     snapperDesc: "底栖捕食性鱼类，食谱广泛，是马来西亚重要的养殖鱼类。",
                     snapperDetails: `
                         <p><strong class="text-[var(--text-primary)]">科学分类：</strong> 笛鲷科。常见种类包括约翰氏笛鲷和红树林红笛鲷。</p>
-                        <p><strong class="text-[var(--text-primary)]">栖息地与行为：</strong> 幼鱼生活在河口，成鱼偏爱珊瑚礁和岩石区，但也会到沙质区域觅食。</p>
-                        <p><strong class="text-[var(--text-primary)]">食性与摄食习惯：</strong> 底栖捕食者，主要以螃蟹、虾、鱼类和其他无脊椎动物为食。</p>
+                        <p><strong class="text-[var(--text-primary)]">栖息地与行为：：</strong> 幼鱼生活在河口，成鱼偏爱珊瑚礁和岩石区，但也会到沙质区域觅食。</p>
+                        <p><strong class="text-[var(--text-primary)]">食性与摄食习惯：：</strong> 底栖捕食者，主要以螃蟹、虾、鱼类和其他无脊椎动物为食。</p>
                     `,
                     chartLabelDiet: "食性 (肉食 > 素食)",
                     chartLabelFight: "搏斗力 (强 > 弱)",
@@ -504,7 +504,7 @@
 
             const fishData = {
                 pacu: {
-                    image: "🐟",
+                    imageUrl: "https://raw.githubusercontent.com/luoxisg/fishing/main/image/pacu.jpg",
                     chartData: { diet: 2, fight: 2, habitat: 3 }, // 1=Herb,5=Carn | 1=Weak,5=Strong | 1=Bottom,5=Top
                     baits: {
                         en: ["Fruits", "Dough Balls", "Plant-based baits"],
@@ -512,7 +512,7 @@
                     }
                 },
                 tilapia: {
-                    image: "🐠",
+                    imageUrl: "https://raw.githubusercontent.com/luoxisg/fishing/main/image/tilapia.jpg",
                     chartData: { diet: 1, fight: 1, habitat: 4 },
                     baits: {
                         en: ["Dough Balls", "Algae baits", "Plant-based baits"],
@@ -520,7 +520,7 @@
                     }
                 },
                 catfish: {
-                    image: "🐡",
+                    imageUrl: "https://raw.githubusercontent.com/luoxisg/fishing/main/image/Catfish.jpg",
                     chartData: { diet: 5, fight: 5, habitat: 1 },
                     baits: {
                         en: ["Chicken Liver", "Cut Fish", "Worms", "Stink Dough Balls"],
@@ -528,7 +528,7 @@
                     }
                 },
                 barramundi: {
-                    image: "🦈",
+                    imageUrl: "https://raw.githubusercontent.com/luoxisg/fishing/main/image/Barramundi.jpg",
                     chartData: { diet: 5, fight: 4, habitat: 2 },
                     baits: {
                         en: ["Cut Fish", "Live Shrimp", "Lures mimicking small fish"],
@@ -536,7 +536,7 @@
                     }
                 },
                 snapper: {
-                    image: "🦐",
+                    imageUrl: "https://raw.githubusercontent.com/luoxisg/fishing/main/image/Snapper.jpg",
                     chartData: { diet: 4, fight: 3, habitat: 1 },
                     baits: {
                         en: ["Shrimp", "Crabs", "Cut Fish", "Squid"],
@@ -630,7 +630,7 @@
                     card.className = 'card rounded-lg shadow-md overflow-hidden cursor-pointer';
                     card.innerHTML = `
                         <div class="p-6 bg-[var(--bg-secondary)] text-center">
-                            <span class="text-6xl">${fish.image}</span>
+                            <img src="${fish.imageUrl}" alt="${translations[currentLanguage][key + 'Name']}" class="w-24 h-24 mx-auto rounded-full object-cover mb-4">
                             <h3 class="text-2xl font-bold mt-4 text-[var(--text-primary)]">${translations[currentLanguage][key + 'Name']}</h3>
                         </div>
                         <div class="p-6">
