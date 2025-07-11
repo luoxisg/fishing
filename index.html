@@ -1,0 +1,845 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hook & Cook Interactive Fishing Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Chosen Palette: Warm Earth Tones */
+        /* Application Structure Plan: A single-page application with a fixed sidebar navigation for desktop and a top-bar for mobile. The content is divided into four thematic sections: 1. Home - A welcoming introduction. 2. Meet the Fish - An interactive gallery of fish species with a comparative chart. 3. The Science of Fishing - A tabbed interface explaining fish senses and an interactive bait recommender. 4. Pro Tips - Practical advice and responsible angling ethics. This structure is chosen to transform a linear document into an exploratory, engaging experience, guiding the user from basic concepts to advanced knowledge in a non-linear way, which is more suitable for a web application and a younger audience. */
+        /* Visualization & Content Choices:
+           - Home: Goal: Inform/Engage. Method: Themed intro text. Interaction: Navigation. Justification: Sets a welcoming tone.
+           - Meet the Fish: Goal: Compare/Inform. Method: HTML/CSS cards for each fish and a Chart.js Radar Chart to compare key attributes (diet, habitat, fighting strength). Interaction: Clicking cards reveals detailed modal pop-ups. Hovering over the chart shows tooltips. Justification: Visual comparison is much faster and more engaging than reading descriptions. Modals present deep information without cluttering the main UI.
+           - The Science of Fishing: Goal: Explain/Organize. Method: Tabbed HTML/CSS sections for Vision, Chemoreception, and Lateral Line. An interactive HTML/JS 'Bait Recommender' tool. Interaction: Users click tabs to switch content. Users select a fish to get bait recommendations. Justification: Tabs break down complex science into manageable chunks. The recommender provides direct, practical application of the knowledge, enhancing user engagement and learning.
+           - Pro Tips: Goal: Inform/Organize. Method: Accordion-style HTML/CSS lists for checklists and best practices. Interaction: Clicking to expand/collapse sections. Justification: Accordions are excellent for presenting lists of information (like what to bring, or catch-and-release steps) in a compact way.
+           - Library/Method: Tailwind CSS for layout, Chart.js for the radar chart, and Vanilla JavaScript for all interactions (navigation, modals, tabs, recommender). */
+        /* CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. */
+
+        :root {
+            --bg-main: #FDFBF6;
+            --bg-secondary: #EADBC8;
+            --text-primary: #3E3232;
+            --text-secondary: #503C3C;
+            --accent: #A0937D;
+            --accent-dark: #7D6E63;
+            --highlight: #DAC0A3;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        .nav-link.active, .nav-link:hover {
+            background-color: var(--bg-secondary);
+            border-left-color: var(--accent-dark);
+            color: var(--text-primary);
+        }
+        .card {
+            background-color: white;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tab.active {
+            border-bottom-color: var(--accent-dark);
+            background-color: var(--bg-secondary);
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .modal-backdrop {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="flex h-screen bg-[var(--bg-main)]">
+        <!-- Sidebar Navigation (Desktop) -->
+        <aside class="hidden md:flex flex-col w-64 bg-white shadow-lg">
+            <div class="p-4 border-b border-gray-200 flex items-center justify-center bg-[var(--bg-secondary)]">
+                <select id="language-switcher-desktop" class="w-full p-2 border rounded-md bg-white text-[var(--text-primary)]">
+                    <option value="en">English</option>
+                    <option value="zh">中文</option>
+                </select>
+            </div>
+            <div class="flex items-center justify-center h-20 shadow-md bg-[var(--bg-secondary)]">
+                <h1 class="text-xl font-bold text-[var(--text-primary)]" data-lang-key="sidebarTitle">🎣 Fishing Guide</h1>
+            </div>
+            <nav class="flex-1 px-2 py-4 space-y-2">
+                <a href="#home" class="nav-link flex items-center px-4 py-2 text-lg font-medium text-[var(--text-secondary)] rounded-md" data-lang-key="navHome">Home</a>
+                <a href="#fish-species" class="nav-link flex items-center px-4 py-2 text-lg font-medium text-[var(--text-secondary)] rounded-md" data-lang-key="navMeetFish">Meet the Fish</a>
+                <a href="#science" class="nav-link flex items-center px-4 py-2 text-lg font-medium text-[var(--text-secondary)] rounded-md" data-lang-key="navScience">The Science of Fishing</a>
+                <a href="#pro-tips" class="nav-link flex items-center px-4 py-2 text-lg font-medium text-[var(--text-secondary)] rounded-md" data-lang-key="navProTips">Pro Tips</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+             <!-- Top Navigation (Mobile) -->
+            <header class="md:hidden flex items-center bg-white p-4 shadow-md">
+                <!-- Language Switcher on the left -->
+                <div class="flex-shrink-0 mr-4">
+                    <select id="language-switcher-mobile" class="p-2 border rounded-md bg-white text-[var(--text-primary)]">
+                        <option value="en">English</option>
+                        <option value="zh">中文</option>
+                    </select>
+                </div>
+                <!-- Title and Mobile Menu Button on the right -->
+                <div class="flex-1 flex justify-end items-center">
+                    <h1 class="text-xl font-bold text-[var(--text-primary)] mr-4" data-lang-key="sidebarTitle">🎣 Fishing Guide</h1>
+                    <button id="mobile-menu-button" class="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--accent)]">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
+            </header>
+            <div id="mobile-menu" class="hidden md:hidden bg-white py-2">
+                <a href="#home" class="block nav-link px-4 py-2 text-base font-medium text-[var(--text-secondary)]" data-lang-key="navHome">Home</a>
+                <a href="#fish-species" class="block nav-link px-4 py-2 text-base font-medium text-[var(--text-secondary)]" data-lang-key="navMeetFish">Meet the Fish</a>
+                <a href="#science" class="block nav-link px-4 py-2 text-base font-medium text-[var(--text-secondary)]" data-lang-key="navScience">The Science of Fishing</a>
+                <a href="#pro-tips" class="block nav-link px-4 py-2 text-base font-medium text-[var(--text-secondary)]" data-lang-key="navProTips">Pro Tips</a>
+            </div>
+
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-[var(--bg-main)] p-4 sm:p-6 md:p-8">
+                <!-- Home Section -->
+                <section id="home" class="content-section">
+                    <div class="bg-white rounded-lg shadow p-8 text-center">
+                        <h2 class="text-4xl font-bold text-[var(--text-primary)] mb-4" data-lang-key="homeTitle">Welcome to Your "Hook & Cook" Adventure!</h2>
+                        <p class="text-lg text-[var(--text-secondary)] leading-relaxed max-w-3xl mx-auto" data-lang-key="homeIntro">
+                            "Hook & Cook" fisheries offer a unique experience: catch fish with your own hands, then immediately enjoy freshly cooked catches at the on-site restaurant. This is not just the joy of fishing, but a perfect blend of sport, nature, and gastronomy. This guide will take you deep into the mysteries of fish biology, from understanding fish senses to scientifically choosing baits, helping you grow from a casual angler into an "angling scientist" with a profound understanding of aquatic life. Ready to start your adventure?
+                        </p>
+                    </div>
+                     <div class="mt-8 bg-white rounded-lg shadow p-8">
+                        <h3 class="text-2xl font-bold text-center mb-6" data-lang-key="whatIsHookCookTitle">What is a "Hook & Cook" Fishery?</h3>
+                        <div class="grid md:grid-cols-2 gap-8 text-[var(--text-secondary)] leading-relaxed">
+                            <div>
+                                <h4 class="font-bold text-lg text-[var(--text-primary)] mb-2" data-lang-key="uniqueExperienceTitle">Unique Leisure Experience</h4>
+                                <p data-lang-key="uniqueExperienceText">These fisheries are venues specifically designed for recreational fishing, often converted from disused fish farms or purpose-built ponds, aiming to provide a unique leisure experience. Here, visitors can enjoy the thrill of fishing and choose to have their caught fish prepared by the on-site restaurant, offering a one-stop "catch-to-cook" service, providing an ideal fishing environment for families and beginners.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg text-[var(--text-primary)] mb-2" data-lang-key="typicalEnvironmentTitle">Typical Fishery Environment</h4>
+                                <p data-lang-key="typicalEnvironmentText">Many "Hook & Cook" fishing ponds in Malaysia are typically freshwater environments, surrounded by natural scenery, offering a tranquil recreational experience. Some ponds may also offer brackish water environments, where fish species like Barramundi and Snapper are reared. These places are usually well-equipped with facilities such as restaurants, tackle shops, and comfortable fishing huts.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Fish Species Section -->
+                <section id="fish-species" class="content-section hidden">
+                    <h2 class="text-4xl font-bold text-center text-[var(--text-primary)] mb-8" data-lang-key="fishSpeciesTitle">Meet the Fish: Common Residents of Malaysian Fisheries</h2>
+                     <p class="text-lg text-center text-[var(--text-secondary)] max-w-3xl mx-auto mb-12" data-lang-key="fishSpeciesIntro">Malaysian recreational fisheries host a diverse range of fish species. Understanding their biological characteristics is crucial for successful angling. Click on the cards below to view detailed profiles for each fish.</p>
+                    <div id="fish-gallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Fish cards will be injected here by JS -->
+                    </div>
+                    <div class="mt-12 bg-white rounded-lg shadow p-8">
+                         <h3 class="text-2xl font-bold text-center mb-2 text-[var(--text-primary)]" data-lang-key="fishComparisonTitle">Fish Characteristics Comparison</h3>
+                         <p class="text-md text-center text-[var(--text-secondary)] mb-6" data-lang-key="fishComparisonIntro">Compare key characteristics of different fish species visually using this radar chart.</p>
+                         <div class="chart-container">
+                            <canvas id="fish-chart"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Science of Fishing Section -->
+                <section id="science" class="content-section hidden">
+                    <h2 class="text-4xl font-bold text-center text-[var(--text-primary)] mb-8" data-lang-key="scienceTitle">The Science of Fishing: Unraveling Fish Feeding Behavior</h2>
+                    <p class="text-lg text-center text-[var(--text-secondary)] max-w-3xl mx-auto mb-12" data-lang-key="scienceIntro">Fish possess highly developed sensory systems. Understanding how they perceive the world will allow you to choose the most effective strategies and baits like a true scientist.</p>
+                    <div class="bg-white rounded-lg shadow p-8">
+                        <div class="border-b border-gray-200">
+                            <nav id="science-tabs" class="-mb-px flex space-x-6">
+                                <button data-tab="vision" class="tab active whitespace-nowrap py-4 px-1 border-b-2 font-medium text-lg" data-lang-key="tabVision">👁️ Vision: Underwater Eyes</button>
+                                <button data-tab="chemo" class="tab whitespace-nowrap py-4 px-1 border-b-2 font-medium text-lg" data-lang-key="tabChemo">👃 Taste & Smell</button>
+                                <button data-tab="lateral" class="tab whitespace-nowrap py-4 px-1 border-b-2 font-medium text-lg" data-lang-key="tabLateral">〰️ Lateral Line: Sixth Sense</button>
+                            </nav>
+                        </div>
+                        <div id="science-content" class="mt-8">
+                            <!-- Tab content will be injected by JS -->
+                        </div>
+                    </div>
+                    <div class="mt-12 bg-white rounded-lg shadow p-8">
+                         <h3 class="text-2xl font-bold text-center mb-6" data-lang-key="baitRecommenderTitle">Interactive Bait Recommender</h3>
+                         <p class="text-md text-center text-[var(--text-secondary)] mb-6" data-lang-key="baitRecommenderIntro">Not sure what bait to use? Select your target fish species, and let me recommend the perfect bait for you!</p>
+                         <div class="flex flex-col items-center space-y-4">
+                            <select id="fish-selector" class="p-2 border rounded-md bg-white w-full max-w-xs">
+                                <!-- Options will be injected by JS -->
+                            </select>
+                            <div id="bait-recommendation" class="mt-4 p-4 bg-[var(--bg-secondary)] rounded-lg text-center w-full max-w-md min-h-[80px]">
+                                <p class="text-[var(--text-secondary)]" data-lang-key="selectFishPrompt">Please select a fish first...</p>
+                            </div>
+                         </div>
+                    </div>
+                </section>
+
+                <!-- Pro Tips Section -->
+                <section id="pro-tips" class="content-section hidden">
+                    <h2 class="text-4xl font-bold text-center text-[var(--text-primary)] mb-8" data-lang-key="proTipsTitle">Pro Tips: Becoming a Responsible Angler</h2>
+                     <p class="text-lg text-center text-[var(--text-secondary)] max-w-3xl mx-auto mb-12" data-lang-key="proTipsIntro">Angling is not just about skill, but also responsibility. Follow these tips to enjoy the fun while protecting our precious aquatic resources.</p>
+                    <div class="space-y-6 max-w-4xl mx-auto">
+                        <div class="accordion-item bg-white rounded-lg shadow">
+                            <button class="accordion-header w-full text-left p-6 flex justify-between items-center">
+                                <span class="text-xl font-semibold text-[var(--text-primary)]" data-lang-key="onSiteProcessTitle">📝 On-site Process & What to Bring</span>
+                                <span class="text-2xl transform transition-transform duration-300">+</span>
+                            </button>
+                            <div class="accordion-content px-6 text-[var(--text-secondary)]">
+                                <div class="py-4 border-t">
+                                    <h4 class="font-bold text-lg mb-2" data-lang-key="suggestedProcessTitle">Suggested Process</h4>
+                                    <ol class="list-decimal list-inside space-y-1">
+                                        <li data-lang-key="process1">Register at the counter, state it's your first time, and you can rent fishing rods.</li>
+                                        <li data-lang-key="process2">Inform staff you have children; they will arrange a suitable pond.</li>
+                                        <li data-lang-key="process3">Fish for 1–2 hours (bait can be refilled if used up).</li>
+                                        <li data-lang-key="process4">If you want to eat your catch, the kitchen can cook it for you (or pack it).</li>
+                                    </ol>
+                                    <h4 class="font-bold text-lg mt-4 mb-2" data-lang-key="whatToBringTitle">Suggested Items to Bring</h4>
+                                     <ul class="list-disc list-inside space-y-1">
+                                        <li data-lang-key="bring1">Sun hat / Umbrella (if weather is hot or showery).</li>
+                                        <li data-lang-key="bring2">Mosquito repellent.</li>
+                                        <li data-lang-key="bring3">Power bank (for photos + navigation).</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                         <div class="accordion-item bg-white rounded-lg shadow">
+                            <button class="accordion-header w-full text-left p-6 flex justify-between items-center">
+                                <span class="text-xl font-semibold text-[var(--text-primary)]" data-lang-key="catchReleaseTitle">💚 "Catch & Release" Best Practices</span>
+                                <span class="text-2xl transform transition-transform duration-300">+</span>
+                            </button>
+                            <div class="accordion-content px-6 text-[var(--text-secondary)]">
+                                <div class="py-4 border-t space-y-3">
+                                   <p data-lang-key="releaseIntro">If you choose to release, follow these steps to ensure the fish returns to the water healthy.</p>
+                                    <p><strong class="text-[var(--text-primary)]" data-lang-key="reduceAirExposureStrong">Reduce Air Exposure:</strong> <span data-lang-key="reduceAirExposureText">Try to keep the fish out of water for 10 seconds or less. Fish need water for oxygen!</span></p>
+                                    <p><strong class="text-[var(--text-primary)]" data-lang-key="wetHandsStrong">Wet Hands:</strong> <span data-lang-key="wetHandsText">Always wet your hands before touching the fish to protect its protective slime coat.</span></p>
+                                    <p><strong class="text-[var(--text-primary)]" data-lang-key="properSupportStrong">Proper Support:</strong> <span data-lang-key="properSupportText">Support the fish's body horizontally with both hands when taking it out of the water. Never hold it by its gills or jaw.</span></p>
+                                    <p><strong class="text-[var(--text-primary)]" data-lang-key="quickUnhookStrong">Quick Unhooking:</strong> <span data-lang-key="quickUnhookText">Barbless hooks and dehooking tools are recommended. If deep-hooked, cutting the line is often better.</span></p>
+                                    <p><strong class="text-[var(--text-primary)]" data-lang-key="gentleReleaseStrong">Gentle Release:</strong> <span data-lang-key="gentleReleaseText">Gently place the fish headfirst into the water, allowing water to flow over its gills.</span></p>
+                                </div>
+                            </div>
+                        </div>
+
+                         <div class="accordion-item bg-white rounded-lg shadow">
+                            <button class="accordion-header w-full text-left p-6 flex justify-between items-center">
+                                <span class="text-xl font-semibold text-[var(--text-primary)]" data-lang-key="environmentalResponsibilityTitle">🌍 Angler's Environmental Responsibility</span>
+                                <span class="text-2xl transform transition-transform duration-300">+</span>
+                            </button>
+                            <div class="accordion-content px-6 text-[var(--text-secondary)]">
+                                <div class="py-4 border-t space-y-3">
+                                   <p data-lang-key="environmentalResponsibilityText1">Developing "angler ethics" is a vital part of conservation efforts. By adopting best practices, even in farmed ponds, we can contribute to the health and resilience of fish populations. This fosters a sense of stewardship and responsibility, transforming a hobby into an active form of environmental conservation.</p>
+                                   <p data-lang-key="environmentalResponsibilityText2">You can even become a "citizen scientist"! By reporting your catches, sizes, and other observations, you can help managers better understand the health of the pond's fish. You are not just a participant, but a contributor to scientific and conservation efforts!</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="fish-modal" class="modal-backdrop fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="modal-content bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto transform scale-95">
+            <div class="sticky top-0 bg-white p-4 border-b flex justify-between items-center">
+                 <h3 id="modal-title" class="text-2xl font-bold"></h3>
+                 <button id="close-modal" class="text-gray-500 hover:text-gray-800 text-3xl">&times;</button>
+            </div>
+            <div id="modal-body" class="p-6">
+                <!-- Modal content injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const translations = {
+                en: {
+                    sidebarTitle: "🎣 Fishing Guide",
+                    navHome: "Home",
+                    navMeetFish: "Meet the Fish",
+                    navScience: "The Science of Fishing",
+                    navProTips: "Pro Tips",
+                    homeTitle: "Welcome to Your \"Hook & Cook\" Adventure!",
+                    homeIntro: "\"Hook & Cook\" fisheries offer a unique experience: catch fish with your own hands, then immediately enjoy freshly cooked catches at the on-site restaurant. This is not just the joy of fishing, but a perfect blend of sport, nature, and gastronomy. This guide will take you deep into the mysteries of fish biology, from understanding fish senses to scientifically choosing baits, helping you grow from a casual angler into an \"angling scientist\" with a profound understanding of aquatic life. Ready to start your adventure?",
+                    whatIsHookCookTitle: "What is a \"Hook & Cook\" Fishery?",
+                    uniqueExperienceTitle: "Unique Leisure Experience",
+                    uniqueExperienceText: "These fisheries are venues specifically designed for recreational fishing, often converted from disused fish farms or purpose-built ponds, aiming to provide a unique leisure experience. Here, visitors can enjoy the thrill of fishing and choose to have their caught fish prepared by the on-site restaurant, offering a one-stop \"catch-to-cook\" service, providing an ideal fishing environment for families and beginners.",
+                    typicalEnvironmentTitle: "Typical Fishery Environment",
+                    typicalEnvironmentText: "Many \"Hook & Cook\" fishing ponds in Malaysia are typically freshwater environments, surrounded by natural scenery, offering a tranquil recreational experience. Some ponds may also offer brackish water environments, where fish species like Barramundi and Snapper are reared. These places are usually well-equipped with facilities such as restaurants, tackle shops, and comfortable fishing huts.",
+                    fishSpeciesTitle: "Meet the Fish: Common Residents of Malaysian Fisheries",
+                    fishSpeciesIntro: "Malaysian recreational fisheries host a diverse range of fish species. Understanding their biological characteristics is crucial for successful angling. Click on the cards below to view detailed profiles for each fish.",
+                    fishComparisonTitle: "Fish Characteristics Comparison",
+                    fishComparisonIntro: "Compare key characteristics of different fish species visually using this radar chart.",
+                    tabVision: "👁️ Vision: Underwater Eyes",
+                    tabChemo: "👃 Taste & Smell",
+                    tabLateral: "〰️ Lateral Line: Sixth Sense",
+                    scienceTitle: "The Science of Fishing: Unraveling Fish Feeding Behavior",
+                    scienceIntro: "Fish possess highly developed sensory systems. Understanding how they perceive the world will allow you to choose the most effective strategies and baits like a true scientist.",
+                    baitRecommenderTitle: "Interactive Bait Recommender",
+                    baitRecommenderIntro: "Not sure what bait to use? Select your target fish species, and let me recommend the perfect bait for you!",
+                    selectFishPrompt: "Please select a fish first...",
+                    proTipsTitle: "Pro Tips: Becoming a Responsible Angler",
+                    proTipsIntro: "Angling is not just about skill, but also responsibility. Follow these tips to enjoy the fun while protecting our precious aquatic resources.",
+                    onSiteProcessTitle: "📝 On-site Process & What to Bring",
+                    suggestedProcessTitle: "Suggested Process",
+                    process1: "Register at the counter, state it's your first time, and you can rent fishing rods.",
+                    process2: "Inform staff you have children; they will arrange a suitable pond.",
+                    process3: "Fish for 1–2 hours (bait can be refilled if used up).",
+                    process4: "If you want to eat your catch, the kitchen can cook it for you (or pack it).",
+                    whatToBringTitle: "Suggested Items to Bring",
+                    bring1: "Sun hat / Umbrella (if weather is hot or showery).",
+                    bring2: "Mosquito repellent.",
+                    bring3: "Power bank (for photos + navigation).",
+                    catchReleaseTitle: "💚 \"Catch & Release\" Best Practices",
+                    releaseIntro: "If you choose to release, follow these steps to ensure the fish returns to the water healthy.",
+                    reduceAirExposureStrong: "Reduce Air Exposure:",
+                    reduceAirExposureText: "Try to keep the fish out of water for 10 seconds or less. Fish need water for oxygen!",
+                    wetHandsStrong: "Wet Hands:",
+                    wetHandsText: "Always wet your hands before touching the fish to protect its protective slime coat.",
+                    properSupportStrong: "Proper Support:",
+                    properSupportText: "Support the fish's body horizontally with both hands when taking it out of the water. Never hold it by its gills or jaw.",
+                    quickUnhookStrong: "Quick Unhooking:",
+                    quickUnhookText: "Barbless hooks and dehooking tools are recommended. If deep-hooked, cutting the line is often better.",
+                    gentleReleaseStrong: "Gentle Release:",
+                    gentleReleaseText: "Gently place the fish headfirst into the water, allowing water to flow over its gills.",
+                    environmentalResponsibilityTitle: "🌍 Angler's Environmental Responsibility",
+                    environmentalResponsibilityText1: "Developing \"angler ethics\" is a vital part of conservation efforts. By adopting best practices, even in farmed ponds, we can contribute to the health and resilience of fish populations. This fosters a sense of stewardship and responsibility, transforming a hobby into an active form of environmental conservation.",
+                    environmentalResponsibilityText2: "You can even become a \"citizen scientist\"! By reporting your catches, sizes, and other observations, you can help managers better understand the health of the pond's fish. You are not just a participant, but a contributor to scientific and conservation efforts!",
+                    // Fish Data
+                    pacuName: "Pacu",
+                    pacuDesc: "Native to South America, despite being related to piranhas, they are generally docile. Their flattened body is adapted for movement among aquatic plants.",
+                    pacuDetails: `
+                        <p><strong class="text-[var(--text-primary)]">Scientific Classification:</strong> Family Serrasalmidae. Common genera include *Colossoma* and *Piaractus*.</p>
+                        <p><strong class="text-[var(--text-primary)]">Habitat and Behavior:</strong> Prefer rivers, lakes, and floodplains. In ponds, they can grow very large, weighing over 5kg. Generally docile and non-aggressive.</p>
+                        <p><strong class="text-[var(--text-primary)]">Diet and Feeding Habits:</strong> Primarily omnivorous, but prefer plant matter, especially fruits, seeds, and nuts. Their strong crushing system is specialized for processing plant-based foods.</p>
+                    `,
+                    tilapiaName: "Tilapia",
+                    tilapiaDesc: "Native to Africa, very hardy and easily domesticated, a common species in aquaculture.",
+                    tilapiaDetails: `
+                        <p><strong class="text-[var(--text-primary)]">Scientific Classification:</strong> Genus *Oreochromis*, e.g., Nile Tilapia.</p>
+                        <p><strong class="text-[var(--text-primary)]">Habitat and Behavior:</strong> Inhabit shallow streams, ponds, rivers, and lakes. Considered one of the world's most invasive alien species due to widespread introduction.</p>
+                        <p><strong class="text-[var(--text-primary)]">Diet and Feeding Habits:</strong> Mainly herbivorous, feeding on plankton, algae, and other plant matter. May also prey on worms and small fish when young.</p>
+                    `,
+                    catfishName: "Catfish",
+                    catfishDesc: "Typically predatory fish with voracious appetites, strong fighters when hooked, and highly interested in strong odors.",
+                    catfishDetails: `
+                        <p><strong class="text-[var(--text-primary)]">Scientific Classification:</strong> Order Siluriformes. Common species include Boal Catfish and Striped Catfish. Redtail and Mekong Catfish are also common.</p>
+                        <p><strong class="text-[var(--text-primary)]">Habitat and Behavior:</strong> Live in deep waters and bottoms of lakes and rivers. Known for their strong fight.</p>
+                        <p><strong class="text-[var(--text-primary)]">Diet and Feeding Habits:</strong> Predatory fish, mainly feeding on other fish. Have voracious appetites and show great interest in strong odors (e.g., chicken liver).</p>
+                    `,
+                    barramundiName: "Barramundi",
+                    barramundiDesc: "Opportunistic predators, spending most of their lives in freshwater but migrating to saltwater to breed. Prefer to hide under cover.",
+                    barramundiDetails: `
+                        <p><strong class="text-[var(--text-primary)]">Scientific Classification:</strong> Genus *Lates*, species *Lates calcarifer*.</p>
+                        <p><strong class="text-[var(--text-primary)]">Habitat and Behavior:</strong> Adaptable to wide salinity changes, prefer to hide under logs or other objects. May school in feeding aggregations.</p>
+                        <p><strong class="text-[var(--text-primary)]">Diet and Feeding Habits:</strong> Opportunistic predators. Juveniles eat crustaceans, adults feed almost entirely on fish. They suction feed and swallow prey whole.</p>
+                    `,
+                    snapperName: "Snapper",
+                    snapperDesc: "Demersal predatory fish with a broad diet, an important cultured fish in Malaysia.",
+                    snapperDetails: `
+                        <p><strong class="text-[var(--text-primary)]">Scientific Classification:</strong> Family Lutjanidae. Common species include John's Snapper and Mangrove Red Snapper.</p>
+                        <p><strong class="text-[var(--text-primary)]">Habitat and Behavior:</strong> Juveniles live in estuaries, adults prefer coral reefs and rocky areas but also forage in sandy areas.</p>
+                        <p><strong class="text-[var(--text-primary)]">Diet and Feeding Habits:</strong> Demersal predators, mainly feeding on crabs, shrimp, fish, and other invertebrates.</p>
+                    `,
+                    chartLabelDiet: "Diet (Carnivore > Herbivore)",
+                    chartLabelFight: "Fighting Strength (Strong > Weak)",
+                    chartLabelHabitat: "Habitat Layer (Top > Bottom)",
+                    baitRecPrompt: "Recommended Bait:",
+                    visionTitle: "👁️ Vision: Underwater Eyes",
+                    visionContent: `
+                        <p class="mb-4">Fish eyes are adapted to the underwater environment with rounder lenses, which help them focus correctly in water. However, water absorbs light, especially red and orange light. This means that in deep or murky water, a bright red lure might appear black!</p>
+                        <p><strong>Application:</strong> In clear, shallow water, realistic colors are effective. But in deep or murky water, <strong>high-contrast</strong> colors (like black and white, bright yellow) or reflective colors (like silver) are more important than specific colors, as they are more easily seen by fish.</p>
+                    `,
+                    chemoTitle: "👃 Taste & Smell",
+                    chemoContent: `
+                        <p class="mb-4">Fish have extremely sensitive senses of smell and taste, capable of detecting minute quantities of chemicals dissolved in water (like amino acids). Their taste buds are not only in their mouths but also spread across their bodies (especially on catfish barbels)! This means they can "taste" anything they touch.</p>
+                        <p><strong>Application:</strong> The <strong>scent</strong> of bait is crucial. Natural baits (like chicken liver, cut fish) release strong chemical signals that are highly attractive to fish. This is why "stink baits" designed for catfish are so effective. Some artificial lures are also impregnated with chemical attractants to enhance their appeal.</p>
+                    `,
+                    lateralTitle: "〰️ Lateral Line: Sixth Sense",
+                    lateralContent: `
+                         <p class="mb-4">The lateral line system is a series of sensory organs along the sides of a fish's body that detects vibrations and pressure changes in the water. This is the fish's "sixth sense," allowing them to perceive prey, obstacles, or predators even when they cannot see clearly.</p>
+                         <p><strong>Application:</strong> The <strong>action</strong> of a lure and the <strong>vibrations</strong> it creates in the water are as important as color and scent. Lures that mimic the vibrations of a struggling baitfish or swimming insect can effectively trigger a predatory response, especially in murky water or during night fishing.</p>
+                    `
+                },
+                zh: {
+                    sidebarTitle: "🎣 钓鱼指南",
+                    navHome: "首页",
+                    navMeetFish: "认识鱼儿",
+                    navScience: "科学钓法",
+                    navProTips: "高手秘籍",
+                    homeTitle: "欢迎来到“钓获烹饪”探险之旅！",
+                    homeIntro: "“钓获烹饪”(Hook & Cook) 渔场提供了一种独特的体验：亲手钓起鱼，然后立即在现场餐厅享用新鲜烹制的渔获。这不仅是垂钓的乐趣，更是运动、自然与美食的完美结合。本指南将带你深入探索鱼类生物学的奥秘，从了解鱼的感官到科学选择饵料，让你从普通垂钓者成长为一名对水生生物有深入理解的“垂钓科学家”。准备好开始你的探险了吗？",
+                    whatIsHookCookTitle: "什么是“钓获烹饪”渔场？",
+                    uniqueExperienceTitle: "独特的休闲体验",
+                    uniqueExperienceText: "这些渔场是专为休闲垂钓设计的场所，通常由废弃的养鱼场改造或专门建造。在这里，游客可以体验垂钓的乐趣，并将渔获交给餐厅烹饪，实现“从钓到吃”的一站式服务，为家庭和初学者提供了理想的垂钓环境。",
+                    typicalEnvironmentTitle: "典型的渔场环境",
+                    typicalEnvironmentText: "马来西亚的“钓获烹饪”渔场多为淡水环境，风光秀丽，宁静宜人。部分渔场也提供咸淡水环境，饲养着尖吻鲈、石斑鱼等鱼类。这些地方通常设施完善，配有餐厅、渔具店和舒适的垂钓小屋。",
+                    fishSpeciesTitle: "认识鱼儿：马来西亚渔场常见居民",
+                    fishSpeciesIntro: "马来西亚的休闲渔场拥有多种鱼类。了解它们的生物特性是成功垂钓的关键。点击下方的卡片，查看每种鱼的详细档案。",
+                    fishComparisonTitle: "鱼类特性对比",
+                    fishComparisonIntro: "通过这个雷达图，直观地比较不同鱼类的关键特性。",
+                    tabVision: "👁️ 视觉：水下之眼",
+                    tabChemo: "👃 味觉与嗅觉",
+                    tabLateral: "〰️ 侧线：第六感",
+                    scienceTitle: "科学钓法：解密鱼儿的觅食行为",
+                    scienceIntro: "鱼类拥有高度发达的感官系统。了解它们如何感知世界，你就能像科学家一样选择最有效的策略和饵料。",
+                    baitRecommenderTitle: "互动式饵料推荐器",
+                    baitRecommenderIntro: "不知道用什么饵料？选择你想要钓的目标鱼种，让我来为你推荐！",
+                    selectFishPrompt: "请先选择一种鱼...",
+                    proTipsTitle: "高手秘籍：成为负责任的垂钓者",
+                    proTipsIntro: "垂钓不仅是技巧，更是一份责任。遵循这些建议，享受乐趣的同时，也保护我们珍贵的水生资源。",
+                    onSiteProcessTitle: "📝 现场流程与建议携带",
+                    suggestedProcessTitle: "建议流程",
+                    process1: "到前台登记，说明是初次体验，可租用钓竿。",
+                    process2: "告诉工作人员有小孩，他们会安排适合的水池。",
+                    process3: "钓鱼1–2小时（鱼饵用完可续买）。",
+                    process4: "钓到的鱼若想吃，可请厨房代为烹饪（或打包）。",
+                    whatToBringTitle: "建议携带",
+                    bring1: "防晒帽 / 雨伞（若天气炎热或阵雨）。",
+                    bring2: "驱蚊液。",
+                    bring3: "手机充电宝（拍照 + 导航）。",
+                    catchReleaseTitle: "💚 “钓后放流”最佳实践",
+                    releaseIntro: "如果你选择放流，请遵循以下步骤，以确保鱼儿能健康地回到水中。",
+                    reduceAirExposureStrong: "减少空气暴露：",
+                    reduceAirExposureText: "尽量将鱼离开水面的时间控制在10秒内。鱼靠水获取氧气！",
+                    wetHandsStrong: "湿手操作：",
+                    wetHandsText: "接触鱼前务必弄湿双手，保护鱼体表的保护性黏液。",
+                    properSupportStrong: "正确支撑：",
+                    properSupportText: "用双手水平支撑鱼的身体，切勿抓其鳃或下颚。",
+                    quickUnhookStrong: "快速摘钩：",
+                    quickUnhookText: "推荐使用无倒刺钩和摘钩工具。如果钩得太深，剪断鱼线是更好的选择。",
+                    gentleReleaseStrong: "温柔放流：",
+                    gentleReleaseText: "将鱼头朝前轻轻放入水中，让水流过它的鳃。",
+                    environmentalResponsibilityTitle: "🌍 垂钓者的环保责任",
+                    environmentalResponsibilityText1: "发展“垂钓者道德”是保护工作的重要部分。通过采纳最佳实践，即使在养殖池塘，我们也能为鱼类种群的健康和恢复力做出贡献。这培养了一种管理和责任感，将一项爱好转变为积极的环境保护形式。",
+                    environmentalResponsibilityText2: "你甚至可以成为一名“公民科学家”！通过报告你的渔获、尺寸等观察结果，可以帮助管理人员更好地了解鱼塘的健康状况。你不仅仅是参与者，更是科学和保护工作的贡献者！",
+                    // Fish Data
+                    pacuName: "巨脂鲤 (Pacu)",
+                    pacuDesc: "原产于南美洲，尽管与食人鱼有亲缘关系，但性情温和。身体扁平，适合在水生植物间穿梭。",
+                    pacuDetails: `
+                        <p><strong class="text-[var(--text-primary)]">科学分类：</strong> 锯脂鲤科。常见属包括 *Colossoma* 和 *Piaractus*。</p>
+                        <p><strong class="text-[var(--text-primary)]">栖息地与行为：</strong> 喜欢河流、湖泊和洪泛区。在池塘中，它们可以长到很大，体重可达5公斤以上。性情温和，不具攻击性。</p>
+                        <p><strong class="text-[var(--text-primary)]">食性与摄食习惯：</strong> 主要为杂食性，但偏爱植物，特别是水果、种子和坚果。它们强大的咀嚼系统专门用于处理植物性食物。</p>
+                    `,
+                    tilapiaName: "罗非鱼 (Tilapia)",
+                    tilapiaDesc: "原产于非洲，生命力顽强，易于驯化，是水产养殖的常见鱼种。",
+                    tilapiaDetails: `
+                        <p><strong class="text-[var(--text-primary)]">科学分类：</strong> 口孵非鲫属，例如尼罗罗非鱼。</p>
+                        <p><strong class="text-[var(--text-primary)]">栖息地与行为：</strong> 栖息于浅溪、池塘、河流和湖泊。因其广泛引入而被视为全球最具侵略性的外来物种之一。</p>
+                        <p><strong class="text-[var(--text-primary)]">食性与摄食习惯：</strong> 主要是草食性，以浮游生物、藻类和其他植物为食。幼年时也可能捕食蠕虫和小鱼。</p>
+                    `,
+                    catfishName: "鲶鱼 (Catfish)",
+                    catfishDesc: "通常是捕食性鱼类，食欲旺盛，上钩后搏斗力强劲，对强烈气味极感兴趣。",
+                    catfishDetails: `
+                        <p><strong class="text-[var(--text-primary)]">科学分类：</strong> 鲶形目。常见种类包括博尔鲶鱼和条纹鲶鱼。红尾鲶和湄公鲶也很常见。</p>
+                        <p><strong class="text-[var(--text-primary)]">栖息地与行为：：</strong> 生活在湖泊和河流的深水区和底部。以其强劲的搏斗而闻名。</p>
+                        <p><strong class="text-[var(--text-primary)]">食性与摄食习惯：</strong> 捕食性鱼类，主要以其他鱼类为食。食欲旺盛，对强烈气味（如鸡肝）表现出极大兴趣。</p>
+                    `,
+                    barramundiName: "尖吻鲈 (Barramundi)",
+                    barramundiDesc: "机会主义捕食者，大部分时间生活在淡水中，但会洄游到咸水繁殖。喜欢躲藏在遮蔽物下。",
+                    barramundiDetails: `
+                        <p><strong class="text-[var(--text-primary)]">科学分类：</strong> 尖吻鲈属，学名 *Lates calcarifer*。</p>
+                        <p><strong class="text-[var(--text-primary)]">栖息地与行为：</strong> 能适应广泛的盐度变化，喜欢躲藏在原木或其他物体下方。捕食时可能会成群结队。</p>
+                        <p><strong class="text-[var(--text-primary)]">食性与摄食习惯：：</strong> 机会主义捕食者。幼鱼吃甲壳类，成鱼几乎完全以鱼类为食。它们通过吸食的方式将食物整吞。</p>
+                    `,
+                    snapperName: "笛鲷 (Snapper)",
+                    snapperDesc: "底栖捕食性鱼类，食谱广泛，是马来西亚重要的养殖鱼类。",
+                    snapperDetails: `
+                        <p><strong class="text-[var(--text-primary)]">科学分类：</strong> 笛鲷科。常见种类包括约翰氏笛鲷和红树林红笛鲷。</p>
+                        <p><strong class="text-[var(--text-primary)]">栖息地与行为：</strong> 幼鱼生活在河口，成鱼偏爱珊瑚礁和岩石区，但也会到沙质区域觅食。</p>
+                        <p><strong class="text-[var(--text-primary)]">食性与摄食习惯：</strong> 底栖捕食者，主要以螃蟹、虾、鱼类和其他无脊椎动物为食。</p>
+                    `,
+                    chartLabelDiet: "食性 (肉食 > 素食)",
+                    chartLabelFight: "搏斗力 (强 > 弱)",
+                    chartLabelHabitat: "栖息层 (上层 > 底层)",
+                    baitRecPrompt: "推荐饵料：",
+                    visionTitle: "👁️ 视觉：水下之眼",
+                    visionContent: `
+                        <p class="mb-4">鱼眼为了适应水下环境，晶状体更圆，这帮助它们在水中正确聚焦。但水会吸收光线，尤其是红色和橙色光。这意味着在深水或浑浊的水中，一个鲜红色的拟饵可能看起来是黑色！</p>
+                        <p><strong>应用：</strong> 在清澈的浅水，逼真的颜色有效。但在深水或浑浊的水中，<strong>高对比度</strong>的颜色（如黑白、亮黄）或能反光的颜色（如银色）比特定颜色更重要，因为它们更容易被鱼看到。</p>
+                    `,
+                    chemoTitle: "👃 味觉与嗅觉",
+                    chemoContent: `
+                        <p class="mb-4">鱼类的嗅觉和味觉极其灵敏，可以探测到溶解在水里极微量的化学物质（如氨基酸）。它们的味蕾不仅在嘴里，甚至遍布全身（特别是鲶鱼的触须上）！这意味着它们能“尝到”任何接触到的东西。</p>
+                        <p><strong>应用：</strong> 饵料的<strong>气味</strong>至关重要。天然饵料（如鸡肝、鱼块）会释放强烈的化学信号，对鱼有致命的吸引力。这就是为什么为鲶鱼设计的“臭饵”如此有效。一些人工拟饵也会注入化学诱食剂来增强效果。</p>
+                    `,
+                    lateralTitle: "〰️ 侧线：第六感",
+                    lateralContent: `
+                         <p class="mb-4">侧线是鱼身体两侧的一排感觉器官，能探测到水中的振动和压力变化。这是鱼的“第六感”，让它们在看不清的情况下也能感知到猎物、障碍物或捕食者。</p>
+                         <p><strong>应用：</strong> 拟饵的<strong>动作</strong>和它在水中产生的<strong>振动</strong>，其重要性不亚于颜色和气味。能模仿受伤小鱼挣扎或昆虫游动所产生振动的拟饵，能有效触发鱼的攻击欲望，尤其是在浑水或夜钓时。</p>
+                    `
+                }
+            };
+
+            let currentLanguage = 'en'; // Default language
+
+            const fishData = {
+                pacu: {
+                    image: "🐟",
+                    chartData: { diet: 2, fight: 2, habitat: 3 }, // 1=Herb,5=Carn | 1=Weak,5=Strong | 1=Bottom,5=Top
+                    baits: {
+                        en: ["Fruits", "Dough Balls", "Plant-based baits"],
+                        zh: ["水果", "面团球", "植物性饵料"]
+                    }
+                },
+                tilapia: {
+                    image: "🐠",
+                    chartData: { diet: 1, fight: 1, habitat: 4 },
+                    baits: {
+                        en: ["Dough Balls", "Algae baits", "Plant-based baits"],
+                        zh: ["面团球", "藻类饵料", "植物性饵料"]
+                    }
+                },
+                catfish: {
+                    image: "🐡",
+                    chartData: { diet: 5, fight: 5, habitat: 1 },
+                    baits: {
+                        en: ["Chicken Liver", "Cut Fish", "Worms", "Stink Dough Balls"],
+                        zh: ["鸡肝", "切块鱼肉", "蠕虫", "臭味面团球"]
+                    }
+                },
+                barramundi: {
+                    image: "🦈",
+                    chartData: { diet: 5, fight: 4, habitat: 2 },
+                    baits: {
+                        en: ["Cut Fish", "Live Shrimp", "Lures mimicking small fish"],
+                        zh: ["切块鱼肉", "活虾", "模仿小鱼的拟饵"]
+                    }
+                },
+                snapper: {
+                    image: "🦐",
+                    chartData: { diet: 4, fight: 3, habitat: 1 },
+                    baits: {
+                        en: ["Shrimp", "Crabs", "Cut Fish", "Squid"],
+                        zh: ["虾", "螃蟹", "切块鱼肉", "鱿鱼"]
+                    }
+                }
+            };
+
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const languageSwitchers = document.querySelectorAll('#language-switcher-desktop, #language-switcher-mobile');
+
+            let fishChart; // Declare chart variable globally
+
+            function updateContent(hash) {
+                hash = hash || '#home';
+
+                sections.forEach(section => {
+                    if ('#' + section.id === hash) {
+                        section.classList.remove('hidden');
+                    } else {
+                        section.classList.add('hidden');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    if (link.getAttribute('href') === hash) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+
+                if(mobileMenu.classList.contains('block')) {
+                    mobileMenu.classList.remove('block');
+                    mobileMenu.classList.add('hidden');
+                }
+            }
+
+            function updateLanguage(lang) {
+                currentLanguage = lang;
+                document.documentElement.lang = lang; // Update HTML lang attribute
+
+                // Update all elements with data-lang-key
+                document.querySelectorAll('[data-lang-key]').forEach(element => {
+                    const key = element.getAttribute('data-lang-key');
+                    if (translations[lang][key]) {
+                        element.innerHTML = translations[lang][key]; // Use innerHTML for rich text
+                    }
+                });
+
+                // Update fish gallery cards
+                renderFishGallery();
+
+                // Update science tab content
+                const currentTab = document.querySelector('#science-tabs button.active');
+                if (currentTab) {
+                    updateScienceTab(currentTab.dataset.tab);
+                } else {
+                    updateScienceTab('vision'); // Default to vision tab
+                }
+
+                // Update bait recommender options and prompt
+                renderBaitRecommender();
+
+                // Update chart labels
+                if (fishChart) {
+                    fishChart.data.labels = [
+                        translations[lang].chartLabelDiet,
+                        translations[lang].chartLabelFight,
+                        translations[lang].chartLabelHabitat
+                    ];
+                    fishChart.update();
+                }
+
+                // Update language switcher selected value
+                languageSwitchers.forEach(switcher => {
+                    switcher.value = lang;
+                });
+            }
+
+            function renderFishGallery() {
+                const gallery = document.getElementById('fish-gallery');
+                gallery.innerHTML = ''; // Clear existing cards
+
+                Object.keys(fishData).forEach(key => {
+                    const fish = fishData[key];
+                    const card = document.createElement('div');
+                    card.className = 'card rounded-lg shadow-md overflow-hidden cursor-pointer';
+                    card.innerHTML = `
+                        <div class="p-6 bg-[var(--bg-secondary)] text-center">
+                            <span class="text-6xl">${fish.image}</span>
+                            <h3 class="text-2xl font-bold mt-4 text-[var(--text-primary)]">${translations[currentLanguage][key + 'Name']}</h3>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-[var(--text-secondary)]">${translations[currentLanguage][key + 'Desc']}</p>
+                        </div>
+                    `;
+                    card.addEventListener('click', () => {
+                        modalTitle.textContent = translations[currentLanguage][key + 'Name'];
+                        modalBody.innerHTML = translations[currentLanguage][key + 'Details'];
+                        modal.classList.remove('hidden');
+                        document.body.style.overflow = 'hidden';
+                    });
+                    gallery.appendChild(card);
+                });
+            }
+
+            function renderBaitRecommender() {
+                const fishSelector = document.getElementById('fish-selector');
+                fishSelector.innerHTML = ''; // Clear existing options
+
+                const defaultOption = document.createElement('option');
+                defaultOption.value = "";
+                defaultOption.textContent = translations[currentLanguage].selectFishPrompt;
+                fishSelector.appendChild(defaultOption);
+
+                Object.keys(fishData).forEach(key => {
+                    const fish = fishData[key];
+                    const option = document.createElement('option');
+                    option.value = key; // Use key for internal lookup
+                    option.textContent = translations[currentLanguage][key + 'Name'];
+                    fishSelector.appendChild(option);
+                });
+
+                // Reset recommendation text
+                baitRecommendation.innerHTML = `<p class="text-[var(--text-secondary)]">${translations[currentLanguage].selectFishPrompt}</p>`;
+            }
+
+            window.addEventListener('hashchange', () => updateContent(window.location.hash));
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const hash = e.currentTarget.getAttribute('href');
+                    window.location.hash = hash;
+                });
+            });
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            languageSwitchers.forEach(switcher => {
+                switcher.addEventListener('change', (e) => {
+                    updateLanguage(e.target.value);
+                });
+            });
+
+            // Fish gallery and modal
+            const modal = document.getElementById('fish-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-body');
+            const closeModalBtn = document.getElementById('close-modal');
+
+            function closeModal() {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+            closeModalBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // Fish Comparison Chart
+            const ctx = document.getElementById('fish-chart').getContext('2d');
+            fishChart = new Chart(ctx, { // Assign to global variable
+                type: 'radar',
+                data: {
+                    labels: [], // Will be set by updateLanguage
+                    datasets: Object.values(fishData).map(fish => ({
+                        label: '', // Will be set by updateLanguage
+                        data: [fish.chartData.diet, fish.chartData.fight, fish.chartData.habitat],
+                        fill: true,
+                        backgroundColor: 'rgba(160, 147, 125, 0.2)', // var(--accent) with opacity
+                        borderColor: 'var(--accent-dark)',
+                        pointBackgroundColor: 'var(--accent-dark)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'var(--accent-dark)'
+                    }))
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { display: true, color: 'rgba(0,0,0,0.1)' },
+                            grid: { color: 'rgba(0,0,0,0.1)' },
+                            suggestedMin: 0,
+                            suggestedMax: 5,
+                            pointLabels: { font: { size: 14, family: 'Inter' }, color: 'var(--text-primary)' },
+                            ticks: {
+                                stepSize: 1,
+                                display: false // Hide numbers on the radar axis
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: 'var(--text-primary)',
+                                font: {
+                                    size: 14,
+                                    family: 'Inter'
+                                },
+                                generateLabels: function(chart) {
+                                    const labels = Chart.defaults.plugins.legend.labels.generateLabels(chart);
+                                    labels.forEach((label, index) => {
+                                        const fishKey = Object.keys(fishData)[index];
+                                        label.text = translations[currentLanguage][fishKey + 'Name'];
+                                    });
+                                    return labels;
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.r !== null) {
+                                        label += context.parsed.r;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+
+            // Science tabs
+            const scienceTabs = document.getElementById('science-tabs');
+            const scienceContentContainer = document.getElementById('science-content');
+
+            function updateScienceTab(tabId) {
+                Object.values(scienceTabs.children).forEach(tab => {
+                    if (tab.dataset.tab === tabId) {
+                        tab.classList.add('active');
+                    } else {
+                        tab.classList.remove('active');
+                    }
+                });
+                const content = translations[currentLanguage][tabId + 'Content'];
+                const title = translations[currentLanguage][tabId + 'Title'];
+                scienceContentContainer.innerHTML = `
+                    <h4 class="text-xl font-bold mb-4 text-[var(--text-primary)]">${title}</h4>
+                    <div class="text-[var(--text-secondary)] leading-relaxed">${content}</div>`;
+            }
+
+            scienceTabs.addEventListener('click', (e) => {
+                if (e.target.matches('button')) {
+                    updateScienceTab(e.target.dataset.tab);
+                }
+            });
+
+
+            // Bait recommender
+            const fishSelector = document.getElementById('fish-selector');
+            const baitRecommendation = document.getElementById('bait-recommendation');
+
+            fishSelector.addEventListener('change', (e) => {
+                const selectedFishKey = e.target.value;
+                const fish = fishData[selectedFishKey];
+                if (fish && fish.baits) {
+                    baitRecommendation.innerHTML = `<p class="font-bold mb-2">${translations[currentLanguage].baitRecPrompt}</p><p class="text-[var(--text-primary)]">${fish.baits[currentLanguage].join('、')}</p>`;
+                } else {
+                     baitRecommendation.innerHTML = `<p class="text-[var(--text-secondary)]">${translations[currentLanguage].selectFishPrompt}</p>`;
+                }
+            });
+
+            // Accordion
+            const accordionItems = document.querySelectorAll('.accordion-item');
+            accordionItems.forEach(item => {
+                const header = item.querySelector('.accordion-header');
+                const content = item.querySelector('.accordion-content');
+                const icon = header.querySelector('span:last-child');
+                header.addEventListener('click', () => {
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                        icon.style.transform = 'rotate(0deg)';
+                    } else {
+                        // Close other open accordions
+                        document.querySelectorAll('.accordion-content').forEach(c => c.style.maxHeight = null);
+                        document.querySelectorAll('.accordion-header span:last-child').forEach(i => i.style.transform = 'rotate(0deg)');
+
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                        icon.style.transform = 'rotate(45deg)';
+                    }
+                });
+            });
+
+            // Initial load
+            const initialLang = localStorage.getItem('language') || 'en';
+            updateLanguage(initialLang);
+            updateContent(window.location.hash);
+        });
+    </script>
+</body>
+</html>
