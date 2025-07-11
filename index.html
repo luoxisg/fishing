@@ -616,4 +616,541 @@
                     proTipsTitle: "Petua Pro: Memancing Bertanggungjawab",
                     proTipsIntro: "Memancing bukan sahaja tentang kemahiran, tetapi juga tanggungjawab. Ikuti petua ini untuk menikmati keseronokan sambil melindungi sumber akuatik kita.",
                     rodSelectionTitle: "🎣 Pemilihan Joran",
-                    proTipsRodSelection: `<p class="mb-4">Memilih joran yang betul adalah penting untuk kejayaan dan keseronokan. Berikut adalah pecahan faktor utama:</p> <h4 class="font-bold text-lg mt-4 mb-2 text-white">1. Panjang</h4> <p>Panjang joran mempengaruhi jarak dan ketepatan balingan. Joran lebih panjang (7 kaki+) membaling lebih jauh, sesuai untuk perairan terbuka. Joran lebih pendek (bawah 7 kaki) menawarkan lebih ketepatan, bagus untuk tempat yang sempit.</p> <h4 class="font-bold text-lg mt-4 mb-2 text-white">2. Kuasa (Power)</h4> <p>Kuasa menerangkan kekuatan atau daya angkat joran. Ia berkisar dari Ultra-Ringan (UL) untuk ikan kecil hingga Sangat-Berat (XH) untuk ikan buruan besar.</p> <h4 class="font-bold text-lg mt-4 mb-2 text-white">3. Aksi (Action)</h4> <p>Aksi menentukan sejauh mana joran membengkok. <strong>Aksi Cepat</strong> membengkok di sepertiga atas, menawarkan kepekaan dan set cang
+                    proTipsRodSelection: `<p class="mb-4">Memilih joran yang betul adalah penting untuk kejayaan dan keseronokan. Berikut adalah pecahan faktor utama:</p> <h4 class="font-bold text-lg mt-4 mb-2 text-white">1. Panjang</h4> <p>Panjang joran mempengaruhi jarak dan ketepatan balingan. Joran lebih panjang (7 kaki+) membaling lebih jauh, sesuai untuk perairan terbuka. Joran lebih pendek (bawah 7 kaki) menawarkan lebih ketepatan, bagus untuk tempat yang sempit.</p> <h4 class="font-bold text-lg mt-4 mb-2 text-white">2. Kuasa (Power)</h4> <p>Kuasa menerangkan kekuatan atau daya angkat joran. Ia berkisar dari Ultra-Ringan (UL) untuk ikan kecil hingga Sangat-Berat (XH) untuk ikan buruan besar.</p> <h4 class="font-bold text-lg mt-4 mb-2 text-white">3. Aksi (Action)</h4> <p>Aksi menentukan sejauh mana joran membengkok. <strong>Aksi Cepat</strong> membengkok di sepertiga atas, menawarkan kepekaan dan set cangkuk yang cepat. <strong>Aksi Sederhana</strong> membengkok di separuh atas, baik untuk serba boleh. <strong>Aksi Perlahan</strong> membengkok hampir ke pemegang, sesuai untuk membaling umpan ringan dan menyerap kejutan dari ikan yang kuat.</p> <table class="pro-tips-table"><thead><tr><th>Kuasa</th><th>Sasaran Ikan</th><th>Aksi</th><th>Penggunaan Terbaik</th></tr></thead><tbody><tr><td>Ringan (L)</td><td>Tilapia, Pacu (kecil)</td><td>Sederhana/Perlahan</td><td>Membaling umpan kecil, pertarungan seronok</td></tr><tr><td>Sederhana (M)</td><td>Siakap, Kakap Merah</td><td>Cepat/Sederhana</td><td>Serba boleh untuk semua keadaan</td></tr><tr><td>Berat (H)</td><td>Keli (besar)</td><td>Cepat</td><td>Kawasan berstruktur berat, set cangkuk kuat</td></tr></tbody></table>`,
+                    onSiteProcessTitle: "📝 Proses di Lokasi & Apa yang Perlu Dibawa",
+                    proTipsOnSite: `<h4 class="font-bold text-lg mb-2 text-white">Proses yang Disyorkan</h4><ol class="list-decimal list-inside space-y-1"><li>Daftar di kaunter, nyatakan ini kali pertama, sewa joran.</li><li>Maklumkan kakitangan jika ada anak untuk kolam yang sesuai.</li><li>Memancing selama 1–2 jam.</li><li>Dapur boleh memasak hasil tangkapan anda.</li></ol><h4 class="font-bold text-lg mt-4 mb-2 text-white">Apa yang Perlu Dibawa</h4><ul class="list-disc list-inside space-y-1"><li>Topi matahari / Payung.</li><li>Penghalau nyamuk.</li><li>Power bank.</li></ul>`,
+                    catchReleaseTitle: "💚 Amalan Terbaik \"Tangkap & Lepas\"",
+                    proTipsCatchRelease: `<p>Ikuti langkah-langkah ini untuk memastikan ikan kembali sihat.</p><p><strong class="text-white">Kurangkan Pendedahan Udara:</strong> 10 saat atau kurang.</p><p><strong class="text-white">Tangan Basah:</strong> Melindungi lapisan lendir ikan.</p><p><strong class="text-white">Sokongan yang Betul:</strong> Sokong badan secara mendatar.</p><p><strong class="text-white">Cepat Tanggalkan Mata Kail:</strong> Guna mata kail tanpa duri.</p><p><strong class="text-white">Lepaskan dengan Lembut:</strong> Letakkan kepala dahulu ke dalam air.</p>`,
+                    environmentalResponsibilityTitle: "🌍 Tanggungjawab Alam Sekitar Pemancing",
+                    proTipsEnvResp: `<p>Membangunkan "etika pemancing" adalah penting. Dengan amalan terbaik, kita menyumbang kepada kesihatan populasi ikan.</p><p>Jadilah "saintis warganegara"! Laporkan hasil tangkapan anda untuk membantu pengurus memahami kesihatan kolam.</p>`
+                }
+            };
+
+            let currentLanguage = 'en';
+
+            const fishData = {
+                pacu: { imageUrl: "https://raw.githubusercontent.com/luoxisg/fishing/main/image/pacu.jpg", chartData: { diet: 2, fight: 3, habitat: 3 }, name: { en: "Pacu", zh: "巨脂鲤 (Pacu)", ml: "Pacu" }, description: { en: "Native to South America, related to piranhas, but generally docile.", zh: "原产于南美洲，与食人鱼有亲缘关系，但性情温和。", ml: "Berasal dari Amerika Selatan, berkaitan dengan piranha, tetapi umumnya jinak." }, details: { en: `<p><strong>Scientific Classification:</strong> Family Serrasalmidae.</p><p><strong>Habitat:</strong> Prefer rivers, lakes, and floodplains. Can grow over 5kg in ponds.</p><p><strong>Diet:</strong> Primarily omnivorous, preferring plant matter like fruits, seeds, and nuts.</p>`, zh: `<p><strong>科学分类：</strong> 锯脂鲤科。</p><p><strong>栖息地：</strong> 喜欢河流、湖泊和洪泛区。在池塘中可长到5公斤以上。</p><p><strong>食性：</strong> 杂食性，偏爱植物，如水果、种子和坚果。</p>`, ml: `<p><strong>Klasifikasi Saintifik:</strong> Famili Serrasalmidae.</p><p><strong>Habitat:</strong> Suka sungai, tasik, dan dataran banjir. Boleh membesar lebih 5kg di kolam.</p><p><strong>Diet:</strong> Omnivor, lebih suka bahan tumbuhan seperti buah, biji, dan kacang.</p>` }, baits: { en: ["Fruits", "Dough Balls", "Plant-based baits"], zh: ["水果", "面团球", "植物性饵料"], ml: ["Buah-buahan", "Bola Doh", "Umpan berasaskan tumbuhan"] } },
+                tilapia: { imageUrl: "https://raw.githubusercontent.com/luoxisg/fishing/main/image/tilapia.jpg", chartData: { diet: 1, fight: 1, habitat: 4 }, name: { en: "Tilapia", zh: "罗非鱼", ml: "Tilapia" }, description: { en: "Native to Africa, very hardy, and a common aquaculture species.", zh: "原产于非洲，生命力顽强，是常见的水产养殖鱼种。", ml: "Berasal dari Afrika, sangat tahan lasak, dan spesies akuakultur biasa." }, details: { en: `<p><strong>Scientific Classification:</strong> Genus *Oreochromis*.</p><p><strong>Habitat:</strong> Inhabit shallow streams, ponds, rivers, and lakes.</p><p><strong>Diet:</strong> Mainly herbivorous, feeding on plankton, algae, and other plant matter.</p>`, zh: `<p><strong>科学分类：</strong> 口孵非鲫属。</p><p><strong>栖息地：</strong> 栖息于浅溪、池塘、河流和湖泊。</p><p><strong>食性：</strong> 主要是草食性，以浮游生物、藻类和植物为食。</p>`, ml: `<p><strong>Klasifikasi Saintifik:</strong> Genus *Oreochromis*.</p><p><strong>Habitat:</strong> Mendiami sungai cetek, kolam, sungai, dan tasik.</p><p><strong>Diet:</strong> Terutamanya herbivor, memakan plankton, alga, dan bahan tumbuhan lain.</p>` }, baits: { en: ["Dough Balls", "Algae baits", "Plant-based baits"], zh: ["面团球", "藻类饵料", "植物性饵料"], ml: ["Bola Doh", "Umpan alga", "Umpan berasaskan tumbuhan"] } },
+                catfish: { imageUrl: "https://raw.githubusercontent.com/luoxisg/fishing/main/image/Catfish.jpg", chartData: { diet: 5, fight: 5, habitat: 1 }, name: { en: "Catfish", zh: "鲶鱼", ml: "Ikan Keli" }, description: { en: "Predatory fish with voracious appetites and a strong fight.", zh: "捕食性鱼类，食欲旺盛，搏斗力强劲。", ml: "Ikan pemangsa dengan selera makan yang rakus dan pertarungan yang kuat." }, details: { en: `<p><strong>Scientific Classification:</strong> Order Siluriformes.</p><p><strong>Habitat:</strong> Live in deep waters and bottoms of lakes and rivers.</p><p><strong>Diet:</strong> Predatory, mainly feeding on other fish. Attracted to strong odors.</p>`, zh: `<p><strong>科学分类：</strong> 鲶形目。</p><p><strong>栖息地：</strong> 生活在湖泊和河流的深水区和底部。</p><p><strong>食性：</strong> 捕食性，主要以其他鱼类为食，对强烈气味感兴趣。</p>`, ml: `<p><strong>Klasifikasi Saintifik:</strong> Order Siluriformes.</p><p><strong>Habitat:</strong> Hidup di perairan dalam dan dasar tasik dan sungai.</p><p><strong>Diet:</strong> Pemangsa, terutamanya memakan ikan lain. Tertarik kepada bau yang kuat.</p>` }, baits: { en: ["Chicken Liver", "Cut Fish", "Worms"], zh: ["鸡肝", "切块鱼肉", "蠕虫"], ml: ["Hati Ayam", "Potongan Ikan", "Cacing"] } },
+                barramundi: { imageUrl: "https://raw.githubusercontent.com/luoxisg/fishing/main/image/Barramundi.jpg", chartData: { diet: 5, fight: 4, habitat: 2 }, name: { en: "Barramundi", zh: "尖吻鲈", ml: "Siakap" }, description: { en: "Opportunistic predators that prefer to hide under cover.", zh: "机会主义捕食者，喜欢躲藏在遮蔽物下。", ml: "Pemangsa oportunistik yang suka bersembunyi di bawah perlindungan." }, details: { en: `<p><strong>Scientific Classification:</strong> Genus *Lates*.</p><p><strong>Habitat:</strong> Adaptable to wide salinity changes, prefer to hide under logs.</p><p><strong>Diet:</strong> Opportunistic predators. Adults feed almost entirely on fish.</p>`, zh: `<p><strong>科学分类：</strong> 尖吻鲈属。</p><p><strong>栖息地：</strong> 能适应广泛的盐度变化，喜欢躲藏在原木下。</p><p><strong>食性：</strong> 机会主义捕食者，成鱼几乎完全以鱼类为食。</p>`, ml: `<p><strong>Klasifikasi Saintifik:</strong> Genus *Lates*.</p><p><strong>Habitat:</strong> Boleh menyesuaikan diri dengan perubahan kemasinan, suka bersembunyi di bawah balak.</p><p><strong>Diet:</strong> Pemangsa oportunistik. Dewasa makan hampir sepenuhnya ikan.</p>` }, baits: { en: ["Cut Fish", "Live Shrimp", "Lures"], zh: ["切块鱼肉", "活虾", "拟饵"], ml: ["Potongan Ikan", "Udang Hidup", "Umpan tiruan"] } },
+                snapper: { imageUrl: "https://raw.githubusercontent.com/luoxisg/fishing/main/image/Snapper.jpg", chartData: { diet: 4, fight: 3, habitat: 1 }, name: { en: "Snapper", zh: "笛鲷", ml: "Kakap Merah" }, description: { en: "Demersal predatory fish with a broad diet.", zh: "底栖捕食性鱼类，食谱广泛。", ml: "Ikan pemangsa demersal dengan diet yang luas." }, details: { en: `<p><strong>Scientific Classification:</strong> Family Lutjanidae.</p><p><strong>Habitat:</strong> Juveniles live in estuaries, adults prefer coral reefs and rocky areas.</p><p><strong>Diet:</strong> Demersal predators, feeding on crabs, shrimp, and fish.</p>`, zh: `<p><strong>科学分类：</strong> 笛鲷科。</p><p><strong>栖息地：</strong> 幼鱼生活在河口，成鱼偏爱珊瑚礁和岩石区。</p><p><strong>食性：</strong> 底栖捕食者，以螃蟹、虾和鱼类为食。</p>`, ml: `<p><strong>Klasifikasi Saintifik:</strong> Famili Lutjanidae.</p><p><strong>Habitat:</strong> Juvenil hidup di muara, dewasa lebih suka terumbu karang.</p><p><strong>Diet:</strong> Pemangsa demersal, memakan ketam, udang, dan ikan.</p>` }, baits: { en: ["Shrimp", "Crabs", "Cut Fish", "Squid"], zh: ["虾", "螃蟹", "切块鱼肉", "鱿鱼"], ml: ["Udang", "Ketam", "Potongan Ikan", "Sotong"] } }
+            };
+
+            const quizQuestions = [
+                { id: 1, question: { en: "Which sense detects vibrations in water?", zh: "哪种感官探测水中的振动？", ml: "Deria manakah yang mengesan getaran di dalam air?" }, options: { en: ["Vision", "Taste", "Lateral Line", "Smell"], zh: ["视觉", "味觉", "侧线", "嗅觉"], ml: ["Penglihatan", "Rasa", "Garis Lateral", "Bau"] }, correctAnswer: 2 },
+                { id: 2, question: { en: "Best bait for a carnivorous Catfish?", zh: "肉食性鲶鱼的最佳鱼饵是？", ml: "Umpan terbaik untuk Ikan Keli karnivor?" }, options: { en: ["Fruits", "Dough Balls", "Chicken Liver", "Algae"], zh: ["水果", "面团球", "鸡肝", "藻类"], ml: ["Buah-buahan", "Bola Doh", "Hati Ayam", "Alga"] }, correctAnswer: 2 },
+                { id: 3, question: { en: "Max time for a fish out of water for 'Catch & Release'?", zh: "“钓后放流”时鱼离水的最长时间？", ml: "Masa maksimum ikan di luar air untuk 'Tangkap & Lepas'?" }, options: { en: ["30s", "1 min", "10s", "No limit"], zh: ["30秒", "1分钟", "10秒", "无限制"], ml: ["30s", "1 min", "10s", "Tiada had"] }, correctAnswer: 2 },
+                { id: 4, question: { en: "Which fish is primarily herbivorous?", zh: "哪种鱼主要是草食性？", ml: "Ikan manakah yang terutamanya herbivor?" }, options: { en: ["Barramundi", "Tilapia", "Snapper", "Catfish"], zh: ["尖吻鲈", "罗非鱼", "笛鲷", "鲶鱼"], ml: ["Siakap", "Tilapia", "Kakap Merah", "Ikan Keli"] }, correctAnswer: 1 }
+            ];
+
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const bottomNavItems = document.querySelectorAll('.bottom-nav-item');
+            const languageSwitcherButtons = document.querySelectorAll('.lang-button');
+            let fishChart;
+
+            // --- 3D Background & Ripple Effect Setup ---
+            const MAX_RIPPLES = 10;
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            camera.position.z = 2;
+
+            // Ripple Plane
+            const rippleGeometry = new THREE.PlaneGeometry(10, 10, 50, 50);
+            const initialRipples = Array(MAX_RIPPLES).fill(0).map(() => new THREE.Vector3(0, 0, -9999));
+            const rippleMaterial = new THREE.ShaderMaterial({
+                vertexShader: `
+                    #define MAX_RIPPLES ${MAX_RIPPLES}
+                    uniform float u_time;
+                    uniform vec3 u_ripples[MAX_RIPPLES]; // x, y are position; z is start time
+                    varying vec3 v_color;
+                    varying vec2 v_uv;
+
+                    void main() {
+                        v_uv = uv;
+                        vec3 pos = position;
+                        float total_displacement = 0.0;
+
+                        for (int i = 0; i < MAX_RIPPLES; i++) {
+                            vec3 ripple = u_ripples[i];
+                            float dist = distance(vec2(pos.x, pos.y), ripple.xy);
+                            float ripple_age = u_time - ripple.z;
+
+                            if (ripple_age > 0.0 && ripple_age < 3.5) {
+                                float wave_profile = sin(dist * 15.0 - ripple_age * 4.0);
+                                float damping = 1.0 / (1.0 + dist * 2.0);
+                                float strength = smoothstep(0.0, 1.0, ripple_age) * smoothstep(3.5, 2.5, ripple_age);
+                                total_displacement += wave_profile * 0.05 * strength * damping;
+                            }
+                        }
+
+                        pos.z += total_displacement;
+                        v_color = vec3(0.1, 0.4 + pos.z * 2.0, 0.7 + pos.z * 3.0);
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+                    }
+                `,
+                fragmentShader: `
+                    varying vec3 v_color;
+                    varying vec2 v_uv;
+                    uniform float u_time;
+
+                    void main() {
+                        float intensity = mod(v_uv.y * 10.0 + u_time * 0.1, 1.0);
+                        float scanline = sin(intensity * 20.0) * 0.02;
+                        gl_FragColor = vec4(v_color, 0.3 - scanline);
+                    }
+                `,
+                uniforms: {
+                    u_time: { value: 0.0 },
+                    u_ripples: { value: initialRipples },
+                },
+                transparent: true
+            });
+            const rippleMesh = new THREE.Mesh(rippleGeometry, rippleMaterial);
+            rippleMesh.rotation.x = -0.2;
+            scene.add(rippleMesh);
+
+            // Background Bubbles using InstancedMesh
+            const BUBBLE_COUNT = 100;
+            const bubbleGeometry = new THREE.SphereGeometry(1, 8, 8);
+            const bubbleMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.3 });
+            const bubbleMesh = new THREE.InstancedMesh(bubbleGeometry, bubbleMaterial, BUBBLE_COUNT);
+            
+            const bubbles = [];
+            const dummy = new THREE.Object3D();
+            for (let i = 0; i < BUBBLE_COUNT; i++) {
+                bubbles.push({
+                    position: new THREE.Vector3(
+                        (Math.random() - 0.5) * 10,
+                        -5 - Math.random() * 5,
+                        (Math.random() - 0.5) * 4 - 2
+                    ),
+                    scale: Math.random() * 0.05 + 0.01,
+                    speed: Math.random() * 0.3 + 0.1,
+                    wobble: Math.random() * 2.0
+                });
+            }
+            scene.add(bubbleMesh);
+            
+            const clock = new THREE.Clock();
+            let rippleIndex = 0;
+
+            function animate3D() {
+                const delta = clock.getDelta();
+                const elapsedTime = clock.getElapsedTime();
+                rippleMaterial.uniforms.u_time.value = elapsedTime;
+                
+                // Animate bubbles
+                bubbles.forEach((bubble, i) => {
+                    bubble.position.y += bubble.speed * delta;
+                    bubble.position.x += Math.sin(elapsedTime * bubble.wobble + i) * 0.1 * delta;
+                    if (bubble.position.y > 5) {
+                        bubble.position.y = -5;
+                        bubble.position.x = (Math.random() - 0.5) * 10;
+                    }
+                    dummy.position.copy(bubble.position);
+                    dummy.scale.set(bubble.scale, bubble.scale, bubble.scale);
+                    dummy.updateMatrix();
+                    bubbleMesh.setMatrixAt(i, dummy.matrix);
+                });
+                bubbleMesh.instanceMatrix.needsUpdate = true;
+                
+                renderer.render(scene, camera);
+                requestAnimationFrame(animate3D);
+            }
+            
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            });
+            
+            function addRipple(e) {
+                const event = e.touches ? e.touches[0] : e;
+                
+                const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+                
+                const vector = new THREE.Vector3(mouseX, mouseY, 0.5);
+                vector.unproject(camera);
+                const dir = vector.sub(camera.position).normalize();
+                const distance = -camera.position.z / dir.z;
+                const pos = camera.position.clone().add(dir.multiplyScalar(distance));
+                
+                rippleMaterial.uniforms.u_ripples.value[rippleIndex].set(pos.x, pos.y, clock.getElapsedTime());
+                rippleIndex = (rippleIndex + 1) % MAX_RIPPLES;
+
+                affectDOMElements(event.clientX, event.clientY);
+            }
+
+            function affectDOMElements(originX, originY) {
+                document.querySelectorAll('.ripple-interactive').forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    const elCenterX = rect.left + rect.width / 2;
+                    const elCenterY = rect.top + rect.height / 2;
+
+                    const distX = elCenterX - originX;
+                    const distY = elCenterY - originY;
+                    const dist = Math.sqrt(distX * distX + distY * distY);
+
+                    const maxDist = 600;
+                    const strength = Math.max(0, 1 - (dist / maxDist));
+
+                    if (strength > 0) {
+                        const pushX = (distX / dist) * strength * 15;
+                        const pushY = (distY / dist) * strength * 15;
+                        const scale = 1 - strength * 0.03;
+
+                        el.style.transform = `translate(${pushX}px, ${pushY}px) scale(${scale})`;
+                        
+                        setTimeout(() => {
+                            el.style.transform = 'none';
+                        }, 800);
+                    }
+                });
+            }
+
+            // --- Main App Logic ---
+            function updateContent(hash) {
+                hash = hash || '#home';
+                navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === hash));
+                bottomNavItems.forEach(item => item.classList.toggle('active', '#' + item.dataset.navSection === hash));
+                
+                let activeSection = null;
+                sections.forEach(section => {
+                    if ('#' + section.id === hash) {
+                        activeSection = section;
+                    } else {
+                        section.classList.add('hidden');
+                        section.classList.remove('active');
+                    }
+                });
+
+                if (activeSection) {
+                    activeSection.classList.remove('hidden');
+                    requestAnimationFrame(() => {
+                        activeSection.classList.add('active');
+                        observeAnimations(activeSection);
+                    });
+                }
+            }
+
+            function updateLanguage(lang) {
+                currentLanguage = lang;
+                document.documentElement.lang = lang;
+                languageSwitcherButtons.forEach(button => button.classList.toggle('active', button.dataset.lang === lang));
+                document.querySelectorAll('[data-lang-key]').forEach(element => {
+                    const key = element.getAttribute('data-lang-key');
+                    const translation = translations[lang]?.[key];
+                    if (translation) element.innerHTML = translation;
+                });
+                renderFishGallery();
+                updateScienceContent();
+                updateProTipsContent();
+                updateRodSelectionContent();
+                renderBaitRecommender();
+                updateChart();
+                renderQuiz();
+            }
+            
+            function updateRodSelectionContent() {
+                const contentDiv = document.getElementById('rod-selection-content');
+                if(contentDiv) {
+                    contentDiv.innerHTML = translations[currentLanguage].proTipsRodSelection;
+                }
+            }
+
+            function initFishChart() {
+                const ctx = document.getElementById('fish-chart').getContext('2d');
+                fishChart = new Chart(ctx, { type: 'radar', data: { labels: [], datasets: [] }, options: {} });
+            }
+
+            function updateChart() {
+                if (!fishChart) return;
+                const lang = currentLanguage;
+                fishChart.data.labels = [translations[lang].chartLabelDiet, translations[lang].chartLabelFight, translations[lang].chartLabelHabitat];
+                fishChart.data.datasets = Object.keys(fishData).map((key, index) => {
+                    const fish = fishData[key];
+                    const colors = ['rgba(255, 99, 132, 0.4)', 'rgba(54, 162, 235, 0.4)', 'rgba(255, 206, 86, 0.4)', 'rgba(75, 192, 192, 0.4)', 'rgba(153, 102, 255, 0.4)'];
+                    const borderColors = ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 206, 86)', 'rgb(75, 192, 192)', 'rgb(153, 102, 255)'];
+                    return {
+                        label: fish.name[lang],
+                        data: Object.values(fish.chartData),
+                        fill: true,
+                        backgroundColor: colors[index % colors.length],
+                        borderColor: borderColors[index % borderColors.length],
+                        pointBackgroundColor: borderColors[index % borderColors.length],
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: borderColors[index % borderColors.length]
+                    };
+                });
+                fishChart.options = {
+                    maintainAspectRatio: false,
+                    scales: { r: {
+                        angleLines: { color: 'rgba(255, 255, 255, 0.2)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.2)' },
+                        pointLabels: { color: '#f0f0f5', font: { size: 14, weight: '600', family: 'Inter' } },
+                        ticks: {
+                            beginAtZero: false, min: 0, max: 5, stepSize: 1,
+                            backdropColor: 'transparent', color: 'rgba(255, 255, 255, 0.7)',
+                            font: { size: 10, family: 'Inter' },
+                            callback: (value) => {
+                                if (value === 1) return translations[lang].scale.low.toUpperCase();
+                                if (value === 3) return translations[lang].scale.mid.toUpperCase();
+                                if (value === 5) return translations[lang].scale.high.toUpperCase();
+                                return '';
+                            }
+                        }
+                    }},
+                    plugins: {
+                        legend: { position: 'top', labels: { color: '#f0f0f5', font: { size: 12, family: 'Inter' } } },
+                        tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.8)', titleColor: '#fff', bodyColor: '#ddd',
+                            callbacks: {
+                                label: (context) => {
+                                    const axis = context.chart.data.labels[context.dataIndex];
+                                    const val = context.raw;
+                                    let valLabel = '';
+                                    if (context.dataIndex === 0) valLabel = translations[lang].chartValues.diet[val];
+                                    else if (context.dataIndex === 1) valLabel = translations[lang].chartValues.fight[val];
+                                    else if (context.dataIndex === 2) valLabel = translations[lang].chartValues.habitat[val];
+                                    return `${axis}: ${valLabel}`;
+                                }
+                            }
+                        }
+                    }
+                };
+                fishChart.update();
+            }
+            
+            function renderFishGallery() {
+                const gallery = document.getElementById('fish-gallery');
+                gallery.innerHTML = '';
+                Object.keys(fishData).forEach(key => {
+                    const fish = fishData[key];
+                    const card = document.createElement('div');
+                    card.className = 'card glass-ui ripple-interactive overflow-hidden cursor-pointer animate-on-scroll';
+                    card.innerHTML = `
+                        <div class="card-inner p-6 text-center">
+                            <img src="${fish.imageUrl}" alt="${fish.name[currentLanguage]}" class="w-40 h-40 mx-auto rounded-full object-cover mb-4 border-4 border-[var(--border-glass)]" onerror="this.onerror=null;this.src='https://placehold.co/160x160/1A2A3A/F5F5F5?text=Fish';">
+                            <h3 class="text-2xl font-bold mt-4 text-white">${fish.name[currentLanguage]}</h3>
+                            <p class="text-gray-300 mt-2">${fish.description[currentLanguage]}</p>
+                        </div>
+                    `;
+                    card.addEventListener('click', () => openModal(fish));
+                    gallery.appendChild(card);
+                });
+                add3DTiltEffect();
+            }
+
+            function openModal(fish) {
+                const modal = document.getElementById('fish-modal');
+                document.getElementById('modal-title').textContent = fish.name[currentLanguage];
+                document.getElementById('modal-body').innerHTML = fish.details[currentLanguage].replace(/<strong>/g, '<strong class="text-white">');
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                const modal = document.getElementById('fish-modal');
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+
+            function updateScienceContent() {
+                document.getElementById('science-vision-content').innerHTML = translations[currentLanguage].scienceVision;
+                document.getElementById('science-chemo-content').innerHTML = translations[currentLanguage].scienceChemo;
+                document.getElementById('science-lateral-content').innerHTML = translations[currentLanguage].scienceLateral;
+            }
+            
+            function updateProTipsContent() {
+                const mapping = { 
+                    onSiteProcessTitle: 'proTipsOnSite', 
+                    catchReleaseTitle: 'proTipsCatchRelease', 
+                    environmentalResponsibilityTitle: 'proTipsEnvResp' 
+                };
+                document.querySelectorAll('#pro-tips .accordion-item').forEach(item => {
+                    const key = item.querySelector('[data-lang-key]').dataset.langKey;
+                    const contentKey = mapping[key];
+                    if (contentKey) {
+                        item.querySelector('.accordion-content').innerHTML = `<div class="py-4 border-t border-[var(--border-glass)] text-gray-300 space-y-3">${translations[currentLanguage][contentKey]}</div>`;
+                    }
+                });
+            }
+
+            function renderBaitRecommender() {
+                const fishSelector = document.getElementById('fish-selector');
+                const originalValue = fishSelector.value;
+                fishSelector.innerHTML = `<option value="">${translations[currentLanguage].selectFishPrompt}</option>`;
+                Object.keys(fishData).forEach(key => {
+                    const option = document.createElement('option');
+                    option.value = key;
+                    option.textContent = fishData[key].name[currentLanguage];
+                    fishSelector.appendChild(option);
+                });
+                fishSelector.value = originalValue;
+                updateBaitRecommendation();
+            }
+            
+            function updateBaitRecommendation() {
+                const fishSelector = document.getElementById('fish-selector');
+                const baitRecommendation = document.getElementById('bait-recommendation');
+                const fish = fishData[fishSelector.value];
+                if (fish?.baits) {
+                    baitRecommendation.innerHTML = `<p class="font-bold mb-2 text-white">${translations[currentLanguage].baitRecPrompt}</p><p class="text-white text-lg">${fish.baits[currentLanguage].join(' • ')}</p>`;
+                } else {
+                    baitRecommendation.innerHTML = `<p class="text-gray-400">${translations[currentLanguage].selectFishPrompt}</p>`;
+                }
+            }
+
+            function renderQuiz() {
+                const container = document.getElementById('quiz-questions');
+                container.innerHTML = '';
+                document.getElementById('quiz-results').classList.add('hidden');
+                quizQuestions.forEach((q, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'mb-8';
+                    div.innerHTML = `
+                        <p class="text-xl font-semibold mb-4 text-white">${index + 1}. ${q.question[currentLanguage]}</p>
+                        <div class="space-y-3">
+                            ${q.options[currentLanguage].map((option, optIndex) => `
+                                <div class="quiz-option p-4 rounded-lg cursor-pointer" data-question-id="${q.id}" data-option-id="${optIndex}">
+                                    <span>${option}</span>
+                                    <span class="feedback-icon text-xl float-right"></span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+                container.querySelectorAll('.quiz-option').forEach(optionDiv => {
+                    optionDiv.addEventListener('click', (e) => {
+                        const qId = e.currentTarget.dataset.questionId;
+                        document.querySelectorAll(`.quiz-option[data-question-id="${qId}"]`).forEach(sib => sib.classList.remove('selected'));
+                        e.currentTarget.classList.add('selected');
+                    });
+                });
+            }
+
+            function submitQuiz() {
+                let score = 0;
+                let allAnswered = true;
+                const resultsDiv = document.getElementById('quiz-results');
+                
+                quizQuestions.forEach(q => {
+                    const selected = document.querySelector(`.quiz-option[data-question-id="${q.id}"].selected`);
+                    if (!selected) { allAnswered = false; return; }
+                    
+                    const isCorrect = parseInt(selected.dataset.optionId) === q.correctAnswer;
+                    if (isCorrect) score++;
+                    
+                    document.querySelectorAll(`.quiz-option[data-question-id="${q.id}"]`).forEach(opt => {
+                        opt.classList.remove('correct', 'incorrect');
+                        opt.querySelector('.feedback-icon').textContent = '';
+                    });
+                    
+                    selected.classList.add(isCorrect ? 'correct' : 'incorrect');
+                    selected.querySelector('.feedback-icon').textContent = isCorrect ? '✔' : '✖';
+                    if (!isCorrect) {
+                        const correctOpt = document.querySelector(`.quiz-option[data-question-id="${q.id}"][data-option-id="${q.correctAnswer}"]`);
+                        correctOpt.classList.add('correct');
+                    }
+                });
+
+                resultsDiv.classList.remove('hidden');
+                if (!allAnswered) {
+                    resultsDiv.innerHTML = `<p class="text-red-400">${translations[currentLanguage].answerAllQuestions}</p>`;
+                } else {
+                    resultsDiv.innerHTML = `<p class="text-white">${translations[currentLanguage].yourScore} ${score} / ${quizQuestions.length}</p>`;
+                }
+            }
+            
+            function add3DTiltEffect() {
+                document.querySelectorAll('.card').forEach(card => {
+                    const cardInner = card.querySelector('.card-inner');
+                    card.addEventListener('mousemove', (e) => {
+                        const rect = card.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        const { width, height } = rect;
+                        const rotateX = (y / height - 0.5) * -20;
+                        const rotateY = (x / width - 0.5) * 20;
+                        cardInner.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+                    });
+                    card.addEventListener('mouseleave', () => {
+                        cardInner.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+                    });
+                });
+            }
+            
+            function observeAnimations(container) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                        }
+                    });
+                }, { threshold: 0.1 });
+
+                container.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+            }
+
+            // --- Event Listeners ---
+            window.addEventListener('hashchange', () => updateContent(window.location.hash));
+            [...navLinks, ...bottomNavItems].forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const hash = e.currentTarget.getAttribute('href');
+                    if (window.location.hash !== hash) window.location.hash = hash;
+                });
+            });
+            languageSwitcherButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    updateLanguage(e.target.dataset.lang);
+                    localStorage.setItem('language', e.target.dataset.lang);
+                });
+            });
+            document.getElementById('close-modal').addEventListener('click', closeModal);
+            document.getElementById('fish-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'fish-modal') closeModal();
+            });
+            
+            document.addEventListener('click', function(e) {
+                const header = e.target.closest('.accordion-header, .science-accordion-header');
+                if (header) {
+                    const content = header.nextElementSibling;
+                    const icon = header.querySelector('span:last-child');
+                    const isExpanded = content.style.maxHeight && content.style.maxHeight !== '0px';
+                    
+                    if (isExpanded) {
+                        content.style.maxHeight = null;
+                        icon.style.transform = 'rotate(0deg)';
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                        icon.style.transform = 'rotate(45deg)';
+                    }
+                }
+            });
+            
+            document.getElementById('fish-selector').addEventListener('change', updateBaitRecommendation);
+            document.getElementById('submit-quiz').addEventListener('click', submitQuiz);
+            
+            // Ripple event listeners
+            window.addEventListener('mousedown', addRipple);
+            window.addEventListener('touchstart', addRipple, { passive: true });
+
+            // --- Initial Load ---
+            initFishChart();
+            animate3D();
+            const initialLang = localStorage.getItem('language') || 'zh';
+            updateLanguage(initialLang);
+            updateContent(window.location.hash);
+        })();
+    </script>
+</body>
+</html>
