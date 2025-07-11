@@ -8,7 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* Chosen Palette: Game-inspired (Darker, vibrant, high contrast) */
-        /* Application Structure Plan: A single-page application with a fixed bottom navigation bar for mobile and a top navigation for desktop. The content is divided into four thematic sections: 1. Home (now including Meet the Fish) - A welcoming introduction with interactive fish gallery and chart. 2. The Science of Fishing - Accordion-style sections for fish senses and an interactive bait recommender. 3. Quiz - An interactive multiple-choice quiz. 4. Pro Tips - Accordion-style practical advice. This structure is chosen to transform a linear document into an exploratory, engaging experience, guiding the user from basic concepts to advanced knowledge in a non-linear way, which is more suitable for a web application and a younger audience, with a strong focus on one-hand mobile operation. */
+        /* Application Structure Plan: A single-page application with a fixed bottom navigation bar for mobile and a top navigation for desktop. The content is divided into four thematic sections: 1. Home (now with Meet the Fish at the very top) - A welcoming introduction with interactive fish gallery and chart. 2. The Science of Fishing - Accordion-style sections for fish senses and an interactive bait recommender. 3. Quiz - An interactive multiple-choice quiz. 4. Pro Tips - Accordion-style practical advice. This structure is chosen to transform a linear document into an exploratory, engaging experience, guiding the user from basic concepts to advanced knowledge in a non-linear way, which is more suitable for a web application and a younger audience, with a strong focus on one-hand mobile operation. */
         /* Visualization & Content Choices:
            - Home (now includes Meet the Fish): Goal: Inform/Engage/Compare. Method: Textual introduction, HTML/CSS cards for each fish, and a Chart.js Radar Chart to compare key attributes. Interaction: Clicking cards reveals detailed modal pop-ups. Justification: Consolidates key introductory and exploratory content for immediate engagement.
            - The Science of Fishing: Goal: Explain/Organize. Method: Accordion-style collapsible sections for Vision, Chemoreception, and Lateral Line. An interactive HTML/JS 'Bait Recommender' tool. Interaction: Users click accordion headers to expand/collapse content. Users select a fish to get bait recommendations. Justification: Accordions improve mobile usability by reducing vertical scroll and allowing focused content consumption.
@@ -18,13 +18,15 @@
         /* CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. */
 
         :root {
-            --bg-main: #1A1A2E; /* Dark Blue/Purple */
-            --bg-secondary: #1F4068; /* Slightly lighter dark blue */
-            --text-primary: #E0E0E0; /* Light Grey */
-            --text-secondary: #B0B0B0; /* Muted Light Grey */
-            --accent: #E45826; /* Vibrant Orange/Red */
-            --accent-dark: #BF3E00; /* Darker Orange/Red */
-            --highlight: #FFD700; /* Gold */
+            --bg-main: #0A0A1A; /* 更深的深蓝/紫色，接近纯黑 */
+            --bg-secondary: #1A2A3A; /* 深灰蓝，作为模块背景 */
+            --text-primary: #F5F5F5; /* 亮白色，高对比度主文本 */
+            --text-secondary: #A0A0A0; /* 柔和的灰色，辅助文本 */
+            --accent: #FF4500; /* 鲜艳的橙红色，强调色 */
+            --accent-dark: #CC3700; /* 更深的橙红色 */
+            --highlight: #FFD700; /* 金色，突出显示 */
+            --border-color: #3A3A4A; /* 模块边框颜色 */
+            --hover-bg: #2A3A4A; /* 悬停背景色 */
         }
         body {
             font-family: 'Inter', sans-serif;
@@ -52,11 +54,12 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; /* Added background-color for smooth transition */
             border-radius: 8px; /* Slightly rounded corners for blocky feel */
             color: var(--text-primary); /* Ensure text color is primary */
+            border: 1px solid var(--border-color); /* Added border */
         }
         .card:hover {
             transform: translateY(-5px) scale(1.02); /* Slight scale up on hover */
             box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.4), 0 6px 10px -3px rgba(0, 0, 0, 0.3); /* Darker, more pronounced shadows */
-            background-color: #2A4F7E; /* Darker secondary on hover */
+            background-color: var(--hover-bg); /* Darker secondary on hover */
         }
         .tab.active {
             border-bottom-color: var(--accent-dark);
@@ -68,13 +71,15 @@
             background-color: var(--bg-secondary); /* Use secondary background */
             color: var(--text-primary); /* Ensure text color is primary */
             transition: background-color 0.3s ease;
+            border: 1px solid var(--border-color); /* Added border */
         }
         .science-accordion-header:hover {
-            background-color: #2F5C8E; /* Slightly lighter secondary on hover */
+            background-color: var(--hover-bg); /* Slightly lighter secondary on hover */
         }
         .science-accordion-header.active {
             background-color: var(--accent);
             color: white;
+            border-color: var(--accent);
         }
         .science-accordion-content {
             max-height: 0;
@@ -83,6 +88,10 @@
             background-color: var(--bg-secondary); /* Content uses secondary background */
             color: var(--text-secondary); /* Content text is secondary */
             padding: 0 1rem; /* Adjust padding for collapsed state */
+            border-left: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            border-radius: 0 0 8px 8px;
         }
         .science-accordion-content.expanded {
             padding: 1rem; /* Padding for expanded state */
@@ -95,6 +104,10 @@
             transition: max-height 0.5s ease-in-out;
             background-color: var(--bg-secondary); /* Content uses secondary background */
             color: var(--text-secondary); /* Content text is secondary */
+            border-left: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            border-radius: 0 0 8px 8px;
         }
         .modal-backdrop {
             transition: opacity 0.3s ease;
@@ -103,6 +116,7 @@
             transition: transform 0.3s ease;
             background-color: var(--bg-secondary); /* Modal uses secondary background */
             color: var(--text-primary); /* Modal text is primary */
+            border: 1px solid var(--border-color);
         }
         .chart-container {
             position: relative;
@@ -122,29 +136,31 @@
         /* Language Switcher Button Styling */
         .lang-button {
             @apply px-3 py-1 rounded-md text-sm font-medium transition-colors duration-300;
-            background-color: #3A3A5A; /* Darker grey for buttons */
+            background-color: var(--bg-secondary); /* Use secondary background */
             color: var(--text-primary);
+            border: 1px solid var(--border-color);
         }
         .lang-button.active {
             background-color: var(--accent);
             color: white;
+            border-color: var(--accent);
         }
         .lang-button:hover:not(.active) {
-            background-color: #4A4A6A; /* Slightly lighter dark grey on hover */
+            background-color: var(--hover-bg); /* Slightly lighter dark grey on hover */
         }
 
         /* Quiz styles */
         .quiz-option {
             @apply p-3 border rounded-md cursor-pointer transition-colors duration-200 flex items-center justify-between;
             background-color: var(--bg-main); /* Options use main background */
-            border-color: #4A4A6A; /* Darker border */
+            border-color: var(--border-color); /* Darker border */
             color: var(--text-primary);
         }
         .quiz-option:hover {
-            background-color: #2A2A4A; /* Darker hover for options */
+            background-color: var(--hover-bg); /* Darker hover for options */
         }
         .quiz-option.selected { /* Added selected state */
-            background-color: #2F5C8E; /* A blue that stands out on dark */
+            background-color: #3A4A5A; /* A darker blue that stands out on main bg */
             border-color: var(--accent);
         }
         .quiz-option.correct {
@@ -171,6 +187,7 @@
             height: 60px;
             box-shadow: 0 -2px 10px rgba(0,0,0,0.5); /* Stronger shadow */
             z-index: 1000;
+            border-top: 1px solid var(--border-color);
         }
         .bottom-nav-item {
             @apply flex flex-col items-center justify-center text-xs font-medium text-[var(--text-secondary)] transition-colors duration-200;
@@ -181,7 +198,7 @@
             color: var(--highlight); /* Highlight color for active */
         }
         .bottom-nav-item:hover {
-            background-color: #2A4F7E; /* Darker secondary on hover */
+            background-color: var(--hover-bg); /* Darker secondary on hover */
         }
         .bottom-nav-item svg {
             width: 24px;
@@ -249,14 +266,7 @@
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-[var(--bg-main)] p-4 sm:p-6 md:p-8">
                 <!-- Home Section (now includes Meet the Fish) -->
                 <section id="home" class="content-section">
-                    <div class="bg-white rounded-lg shadow p-8 text-center mb-8">
-                        <h2 class="text-4xl font-bold text-[var(--text-primary)] mb-4" data-lang-key="homeTitle">Welcome to Your "Hook & Cook" Adventure!</h2>
-                        <p class="text-lg text-[var(--text-secondary)] leading-relaxed max-w-3xl mx-auto" data-lang-key="homeIntro">
-                            "Hook & Cook" fisheries offer a unique experience: catch fish with your own hands, then immediately enjoy freshly cooked catches at the on-site restaurant. This is not just the joy of fishing, but a perfect blend of sport, nature, and gastronomy. This guide will take you deep into the mysteries of fish biology, from understanding fish senses to scientifically choosing baits, helping you grow from a casual angler into an "angling scientist" with a profound understanding of aquatic life. Ready to start your adventure?
-                        </p>
-                    </div>
-
-                    <!-- Meet the Fish content moved here -->
+                    <!-- Meet the Fish content moved here to the very top -->
                     <div class="bg-[var(--bg-secondary)] rounded-lg shadow p-8 mb-8">
                         <h2 class="text-4xl font-bold text-center text-[var(--text-primary)] mb-8" data-lang-key="fishSpeciesTitle">Meet the Fish: Common Residents of Malaysian Fisheries</h2>
                         <p class="text-lg text-center text-[var(--text-secondary)] max-w-3xl mx-auto mb-12" data-lang-key="fishSpeciesIntro">Malaysian recreational fisheries host a diverse range of fish species. Understanding their biological characteristics is crucial for successful angling. Click on the cards below to view detailed profiles for each fish.</p>
@@ -270,6 +280,13 @@
                                 <canvas id="fish-chart"></canvas>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="bg-[var(--bg-secondary)] rounded-lg shadow p-8 text-center mb-8">
+                        <h2 class="text-4xl font-bold text-[var(--text-primary)] mb-4" data-lang-key="homeTitle">Welcome to Your "Hook & Cook" Adventure!</h2>
+                        <p class="text-lg text-[var(--text-secondary)] leading-relaxed max-w-3xl mx-auto" data-lang-key="homeIntro">
+                            "Hook & Cook" fisheries offer a unique experience: catch fish with your own hands, then immediately enjoy freshly cooked catches at the on-site restaurant. This is not just the joy of fishing, but a perfect blend of sport, nature, and gastronomy. This guide will take you deep into the mysteries of fish biology, from understanding fish senses to scientifically choosing baits, helping you grow from a casual angler into an "angling scientist" with a profound understanding of aquatic life. Ready to start your adventure?
+                        </p>
                     </div>
 
                      <div class="mt-8 bg-[var(--bg-secondary)] rounded-lg shadow p-8">
@@ -650,7 +667,7 @@
                     },
                     details: {
                         en: `<p><strong class="text-[var(--text-primary)]">Scientific Classification:</strong> Genus *Oreochromis*, e.g., Nile Tilapia.</p><p><strong class="text-[var(--text-primary)]">Habitat and Behavior:</strong> Inhabit shallow streams, ponds, rivers, and lakes. Considered one of the world's most invasive alien species due to widespread introduction.</p><p><strong class="text-[var(--text-primary)]">Diet and Feeding Habits:</strong> Mainly herbivorous, feeding on plankton, algae, and other plant matter. May also prey on worms and small fish when young.</p>`,
-                        zh: `<p><strong class="text-[var(--text-primary)]">科学分类：</strong> 口孵非鲫属，例如尼罗罗非鱼。</p><p><strong class="text-[var(--text-primary)]">栖息地与行为：：</strong> 栖息于浅溪、池塘、河流和湖泊。因其广泛引入而被视为全球最具侵略性的外来物种之一。</p><p><strong class="text-[var(--text-primary)]">食性与摄食习惯：：</strong> 主要是草食性，以浮游生物、藻类和其他植物为食。幼年时也可能捕食蠕虫和小鱼。</p>`,
+                        zh: `<p><strong class="text-[var(--text-primary)]">科学分类：：</strong> 口孵非鲫属，例如尼罗罗非鱼。</p><p><strong class="text-[var(--text-primary)]">栖息地与行为：：</strong> 栖息于浅溪、池塘、河流和湖泊。因其广泛引入而被视为全球最具侵略性的外来物种之一。</p><p><strong class="text-[var(--text-primary)]">食性与摄食习惯：：</strong> 主要是草食性，以浮游生物、藻类和其他植物为食。幼年时也可能捕食蠕虫和小鱼。</p>`,
                         ml: `<p><strong class="text-[var(--text-primary)]">Klasifikasi Saintifik:</strong> Genus *Oreochromis*, cth., Tilapia Nil.</p><p><strong class="text-[var(--text-primary)]">Habitat dan Tingkah Laku:</strong> Mendiami sungai cetek, kolam, sungai, dan tasik. Dianggap sebagai salah satu spesies asing paling invasif di dunia kerana pengenalan meluas.</p><p><strong class="text-[var(--text-primary)]">Diet dan Tabiat Pemakanan:</strong> Terutamanya herbivor, memakan plankton, alga, dan bahan tumbuhan lain. Mungkin juga memakan cacing dan ikan kecil apabila muda.</p>`
                     },
                     baits: {
@@ -670,7 +687,7 @@
                     },
                     details: {
                         en: `<p><strong class="text-[var(--text-primary)]">Scientific Classification:</strong> Order Siluriformes. Common species include Boal Catfish and Striped Catfish. Redtail and Mekong Catfish are also common.</p><p><strong class="text-[var(--text-primary)]">Habitat and Behavior:</strong> Live in deep waters and bottoms of lakes and rivers. Known for their strong fight.</p><p><strong class="text-[var(--text-primary)]">Diet and Feeding Habits:</strong> Predatory fish, mainly feeding on other fish. Have voracious appetites and show great interest in strong odors (e.g., chicken liver).</p>`,
-                        zh: `<p><strong class="text-[var(--text-primary)]">科学分类：</strong> 鲶形目。常见种类包括博尔鲶鱼和条纹鲶鱼。红尾鲶和湄公鲶也很常见。</p><p><strong class="text-[var(--text-primary)]">栖息地与行为：：</strong> 生活在湖泊和河流的深水区和底部。以其强劲的搏斗而闻名。</p><p><strong class="text-[var(--text-primary)]">食性与摄食习惯：：</strong> 捕食性鱼类，主要以其他鱼类为食。食欲旺盛，对强烈气味（如鸡肝）表现出极大兴趣。</p>`,
+                        zh: `<p><strong class="text-[var(--text-primary)]">科学分类：：</strong> 鲶形目。常见种类包括博尔鲶鱼和条纹鲶鱼。红尾鲶和湄公鲶也很常见。</p><p><strong class="text-[var(--text-primary)]">栖息地与行为：：</strong> 生活在湖泊和河流的深水区和底部。以其强劲的搏斗而闻名。</p><p><strong class="text-[var(--text-primary)]">食性与摄食习惯：：</strong> 捕食性鱼类，主要以其他鱼类为食。食欲旺盛，对强烈气味（如鸡肝）表现出极大兴趣。</p>`,
                         ml: `<p><strong class="text-[var(--text-primary)]">Klasifikasi Saintifik:</strong> Order Siluriformes. Spesies biasa termasuk Ikan Keli Boal dan Ikan Keli Berjalur. Ikan Keli Ekor Merah dan Ikan Keli Mekong juga biasa.</p><p><strong class="text-[var(--text-primary)]">Habitat dan Tingkah Laku:</strong> Hidup di perairan dalam dan dasar tasik dan sungai. Terkenal dengan pertarungan yang kuat.</p><p><strong class="text-[var(--text-primary)]">Diet dan Tabiat Pemakanan:</strong> Ikan pemangsa, terutamanya memakan ikan lain. Mempunyai selera makan yang rakus dan menunjukkan minat yang besar terhadap bau yang kuat (cth., hati ayam).</p>`
                     },
                     baits: {
@@ -690,7 +707,7 @@
                     },
                     details: {
                         en: `<p><strong class="text-[var(--text-primary)]">Scientific Classification:</strong> Genus *Lates*, species *Lates calcarifer*.</p><p><strong class="text-[var(--text-primary)]">Habitat and Behavior:</strong> Adaptable to wide salinity changes, prefer to hide under logs or other objects. May school in feeding aggregations.</p><p><strong class="text-[var(--text-primary)]">Diet and Feeding Habits:</strong> Opportunistic predators. Juveniles eat crustaceans, adults feed almost entirely on fish. They suction feed and swallow prey whole.</p>`,
-                        zh: `<p><strong class="text-[var(--text-primary)]">科学分类：</strong> 尖吻鲈属，学名 *Lates calcarifer*。</p><p><strong class="text-[var(--text-primary)]">栖息地与行为：：</strong> 能适应广泛的盐度变化，喜欢躲藏在原木或其他物体下方。捕食时可能会成群结队。</p><p><strong class="text-[var(--text-primary)]">食性与摄食习惯：：</strong> 机会主义捕食者。幼鱼吃甲壳类，成鱼几乎完全以鱼类为食。它们通过吸食的方式将食物整吞。</p>`,
+                        zh: `<p><strong class="text-[var(--text-primary)]">科学分类：：</strong> 尖吻鲈属，学名 *Lates calcarifer*。</p><p><strong class="text-[var(--text-primary)]">栖息地与行为：：</strong> 能适应广泛的盐度变化，喜欢躲藏在原木或其他物体下方。捕食时可能会成群结队。</p><p><strong class="text-[var(--text-primary)]">食性与摄食习惯：：</strong> 机会主义捕食者。幼鱼吃甲壳类，成鱼几乎完全以鱼类为食。它们通过吸食的方式将食物整吞。</p>`,
                         ml: `<p><strong class="text-[var(--text-primary)]">Klasifikasi Saintifik:</strong> Genus *Lates*, spesies *Lates calcarifer*.</p><p><strong class="text-[var(--text-primary)]">Habitat dan Tingkah Laku:</strong> Boleh menyesuaikan diri dengan perubahan kemasinan yang luas, lebih suka bersembunyi di bawah balak atau objek lain. Mungkin berkumpul dalam agregasi pemakanan.</p><p><strong class="text-[var(--text-primary)]">Diet dan Tabiat Pemakanan:</strong> Pemangsa oportunistik. Juvenil memakan krustasea, dewasa hampir sepenuhnya memakan ikan. Mereka makan dengan menghisap dan menelan mangsa secara keseluruhan.</p>`
                     },
                     baits: {
@@ -711,7 +728,7 @@
                     details: {
                         en: `<p><strong class="text-[var(--text-primary)]">Scientific Classification:</strong> Family Lutjanidae. Common species include John's Snapper and Mangrove Red Snapper.</p><p><strong class="text-[var(--text-primary)]">Habitat and Behavior:</strong> Juveniles live in estuaries, adults prefer coral reefs and rocky areas but also forage in sandy areas.</p><p><strong class="text-[var(--text-primary)]">Diet and Feeding Habits:</strong> Demersal predators, mainly feeding on crabs, shrimp, fish, and other invertebrates.</p>`,
                         zh: `<p><strong class="text-[var(--text-primary)]">科学分类：：</strong> 笛鲷科。常见种类包括约翰氏笛鲷和红树林红笛鲷。</p><p><strong class="text-[var(--text-primary)]">栖息地与行为：：</strong> 幼鱼生活在河口，成鱼偏爱珊瑚礁和岩石区，但也会到沙质区域觅食。</p><p><strong class="text-[var(--text-primary)]">食性与摄食习惯：：</strong> 底栖捕食者，主要以螃蟹、虾、鱼类和其他无脊椎动物为食。</p>`,
-                        ml: `<p><strong class="text-[var(--text-primary)]">Klasifikasi Saintifik:</strong> Famili Lutjanidae. Spesies biasa termasuk Kakap Merah John dan Kakap Merah Bakau.</p><p><strong class="text-[var(--text-primary)]">Habitat dan Tingkah Laku:</strong> Juvenil hidup di muara, dewasa lebih suka terumbu karang dan kawasan berbatu tetapi juga mencari makan di kawasan berpasir.</p><p><strong class="text-[var(--text-primary)]">Diet dan Tabiat Pemakanan:</strong> Pemangsa demersal, terutamanya memakan ketam, udang, ikan, dan invertebrata motil lain.</p>`
+                        ml: `<p><strong class="text-[var(--text-primary)]">Klasifikasi Saintifik:</strong> Famili Lutjanidae. Spesies biasa termasuk Kakap Merah John dan Kakap Merah Bakau.</p><p><strong class="text-[var(--text-primary)]">Habitat dan Tingkah Laku:</strong> Juvenil hidup di muara, dewasa lebih suka terumbu karang dan kawasan berbatu tetapi juga mencari makan di kawasan berpasir. </p><p><strong class="text-[var(--text-primary)]">Diet dan Tabiat Pemakanan:</strong> Pemangsa demersal, terutamanya memakan ketam, udang, ikan, dan invertebrata motil lain.</p>`
                     },
                     baits: {
                         en: ["Shrimp", "Crabs", "Cut Fish", "Squid"],
@@ -831,6 +848,16 @@
 
             let fishChart; // Declare chart variable globally
 
+            // Define a set of vibrant colors for the chart datasets
+            const chartColors = [
+                { background: 'rgba(255, 99, 132, 0.6)', border: 'rgb(255, 99, 132)' }, // Red
+                { background: 'rgba(54, 162, 235, 0.6)', border: 'rgb(54, 162, 235)' }, // Blue
+                { background: 'rgba(255, 206, 86, 0.6)', border: 'rgb(255, 206, 86)' }, // Yellow
+                { background: 'rgba(75, 192, 192, 0.6)', border: 'rgb(75, 192, 192)' }, // Green
+                { background: 'rgba(153, 102, 255, 0.6)', border: 'rgb(153, 102, 255)' }  // Purple
+            ];
+
+
             function updateContent(hash) {
                 hash = hash || '#home';
 
@@ -916,6 +943,11 @@
                         translations[lang].chartLabelFight,
                         translations[lang].chartLabelHabitat
                     ];
+                    // Update dataset labels as well
+                    fishChart.data.datasets.forEach((dataset, index) => {
+                        const fishKey = Object.keys(fishData)[index];
+                        dataset.label = fishData[fishKey].name[currentLanguage];
+                    });
                     fishChart.update();
                 }
 
@@ -942,7 +974,7 @@
                     card.className = 'card rounded-lg shadow-md overflow-hidden cursor-pointer';
                     card.innerHTML = `
                         <div class="p-6 bg-[var(--bg-main)] text-center">
-                            <img src="${fish.imageUrl}" alt="${fish.name[currentLanguage]}" class="w-40 h-40 mx-auto rounded-full object-cover mb-4 transform transition-transform duration-300 hover:scale-105"> <!-- Increased size and added hover scale -->
+                            <img src="${fish.imageUrl}" alt="${fish.name[currentLanguage]}" class="w-48 h-48 mx-auto rounded-full object-cover mb-4 transform transition-transform duration-300 hover:scale-105"> <!-- Increased size to w-48 h-48 -->
                             <h3 class="text-2xl font-bold mt-4 text-[var(--text-primary)]">${fish.name[currentLanguage]}</h3>
                         </div>
                         <div class="p-6">
