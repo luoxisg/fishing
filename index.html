@@ -9,23 +9,15 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* ==========================================================================
-        WORLD-CLASS UPGRADE V6 - DYNAMIC BUBBLE SYSTEM
+        WORLD-CLASS UPGRADE V7 - MOBILE LAYOUT FIX
         ==========================================================================
-        1.  **InstancedMesh for Bubbles:** To efficiently render hundreds of bubbles,
-            `THREE.InstancedMesh` is now used. This is vastly more performant than
-            creating individual meshes for each bubble.
-        2.  **Bubble Physics Simulation:**
-            - A `bubbles` array is created, where each object stores its position,
-              size, speed, and a random offset for wobbling.
-            - In the animation loop, each bubble's position is updated. It rises
-              vertically at its own speed and wobbles horizontally using a sine wave
-              based on its vertical position and random offset.
-        3.  **Seamless Looping:** When a bubble moves off the top of the screen, its
-            properties are reset, and it reappears at the bottom, creating an endless,
-            natural-looking stream of bubbles.
-        4.  **Enhanced Depth:** The bubbles are rendered behind the interactive ripple
-            plane, adding another layer of depth to the scene and reinforcing the
-            underwater illusion.
+        1.  **Robust Section Toggling:** The primary cause of the mobile layout bug
+            was the use of `position: absolute` on hidden sections. This method can
+            be fragile and cause parent containers to collapse.
+        2.  **The Fix:** The hiding mechanism has been refactored to use `display: none;`
+            which is the most robust way to remove an element from the document flow.
+            The fade-in/out transition is now handled by adding/removing an `active`
+            class that controls opacity, ensuring the layout remains stable at all times.
         ==========================================================================
         */
 
@@ -73,27 +65,16 @@
             transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        /* Page Section Transitions */
+        /* Page Section Transitions - More Robust Method */
         .content-section {
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-            will-change: opacity, transform;
+            transition: opacity 0.5s ease-out;
+            opacity: 0;
+        }
+        .content-section.active {
+            opacity: 1;
         }
         .content-section.hidden {
-            opacity: 0;
-            transform: translateY(20px);
-            pointer-events: none;
-            position: absolute; /* Prevent layout shifts during transition */
-            width: calc(100% - 2rem); /* Adjust for padding */
-        }
-        @media (min-width: 640px) {
-            .content-section.hidden {
-                width: calc(100% - 3rem); /* Adjust for sm padding */
-            }
-        }
-        @media (min-width: 768px) {
-            .content-section.hidden {
-                width: calc(100% - 4rem); /* Adjust for md padding */
-            }
+            display: none;
         }
         
         /* Upgraded Card Style with 3D Tilt */
@@ -760,15 +741,24 @@
                 hash = hash || '#home';
                 navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === hash));
                 bottomNavItems.forEach(item => item.classList.toggle('active', '#' + item.dataset.navSection === hash));
+                
+                let activeSection = null;
                 sections.forEach(section => {
-                    const sectionIsActive = '#' + section.id === hash;
-                    if (sectionIsActive) {
-                        section.classList.remove('hidden');
-                        setTimeout(() => observeAnimations(section), 50);
+                    if ('#' + section.id === hash) {
+                        activeSection = section;
                     } else {
                         section.classList.add('hidden');
+                        section.classList.remove('active');
                     }
                 });
+
+                if (activeSection) {
+                    activeSection.classList.remove('hidden');
+                    setTimeout(() => {
+                        activeSection.classList.add('active');
+                        observeAnimations(activeSection);
+                    }, 50);
+                }
             }
 
             function updateLanguage(lang) {
