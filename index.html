@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,15 +9,18 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* ==========================================================================
-        WORLD-CLASS UPGRADE V7 - MOBILE LAYOUT FIX
+        WORLD-CLASS UPGRADE V7 - MOBILE LAYOUT & STABILITY FIX
         ==========================================================================
         1.  **Robust Section Toggling:** The primary cause of the mobile layout bug
             was the use of `position: absolute` on hidden sections. This method can
-            be fragile and cause parent containers to collapse.
-        2.  **The Fix:** The hiding mechanism has been refactored to use `display: none;`
-            which is the most robust way to remove an element from the document flow.
-            The fade-in/out transition is now handled by adding/removing an `active`
-            class that controls opacity, ensuring the layout remains stable at all times.
+            be fragile and cause parent containers to collapse. The hiding mechanism
+            now uses `display: none;` which is the most robust way to remove an
+            element from the document flow. The fade-in/out transition is handled
+            by adding/removing an `active` class that controls opacity.
+        2.  **Three.js Stability:** The WebGL animation logic has been refactored
+            to be more stable across devices, fixing the rendering errors that
+            caused the blank screen on mobile. The data pipeline to the shaders
+            for both ripples and bubbles is now more robust.
         ==========================================================================
         */
 
@@ -1069,3 +1072,19 @@
     </script>
 </body>
 </html>
+" from the immersive artifact "交互式钓鱼指南 - 终极涟漪版 (已修复)" with id "fishing_guide_ripple_demo" and am asking a query about/based on this code below.
+Instructions to follow:
+  * Don't output/edit the document if the query is Direct/Simple. For example, if the query asks for a simple explanation, output a direct answer.
+  * Make sure to **edit** the document if the query shows the intent of editing the document, in which case output the entire edited document, **not just that section or the edits**.
+    * Don't output the same document/empty document and say that you have edited it.
+    * Don't change unrelated code in the document.
+  * Don't output  and  in your final response.
+  * Any references like "this" or "selected code" refers to the code between  and  tags.
+  * Just acknowledge my request in the introduction.
+  * Make sure to refer to the document as "Canvas" in your response.
+
+Add a new section called "Bait Science" with the following content:
+1.  **Natural Baits**: Discuss the advantages of using natural baits like worms, insects, and small fish, emphasizing their scent and texture.
+2.  **Artificial Lures**: Explain the different types of artificial lures (e.g., spinners, plugs, soft plastics) and their respective applications.
+3.  **Scent Attractants**: Describe how scent attractants can be used to enhance the effectiveness of both natural and artificial baits.
+4.  **Bait Presentation**: Provide tips on how to present bait in a way that is most appealing to fish, including techniques like jigging and trolli
