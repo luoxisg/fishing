@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,18 +9,20 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* ==========================================================================
-        WORLD-CLASS UPGRADE V7 - MOBILE LAYOUT & STABILITY FIX
+        WORLD-CLASS UPGRADE V8 - NAVIGATION RESTRUCTURE
         ==========================================================================
-        1.  **Robust Section Toggling:** The primary cause of the mobile layout bug
-            was the use of `position: absolute` on hidden sections. This method can
-            be fragile and cause parent containers to collapse. The hiding mechanism
-            now uses `display: none;` which is the most robust way to remove an
-            element from the document flow. The fade-in/out transition is handled
-            by adding/removing an `active` class that controls opacity.
-        2.  **Three.js Stability:** The WebGL animation logic has been refactored
-            to be more stable across devices, fixing the rendering errors that
-            caused the blank screen on mobile. The data pipeline to the shaders
-            for both ripples and bubbles is now more robust.
+        1.  **Navigation Restructure:** "Bait Science" and "Rod Selection" are now
+            promoted to top-level navigation items, parallel to "Home", "Science", etc.
+            This improves information architecture and makes these key guides more
+            accessible.
+        2.  **HTML & JS Updates:**
+            - Both desktop sidebar and mobile bottom navigation have been updated
+              to include the new links.
+            - New content sections (`#bait-science`, `#rod-selection`) have been created.
+            - Content has been moved from the "Pro Tips" accordion to these new sections.
+            - Translation keys and logic have been updated to support the new structure.
+        3.  **Mobile Navigation:** The bottom navigation now accommodates more items,
+            with icons and text adjusted for clarity on smaller screens.
         ==========================================================================
         */
 
@@ -161,6 +163,13 @@
         .bottom-nav-item {
             transition: all 0.3s ease;
         }
+        .bottom-nav-item svg {
+            width: 20px;
+            height: 20px;
+        }
+        .bottom-nav-item span {
+            font-size: 10px;
+        }
         
         /* Sidebar (Desktop) */
         aside {
@@ -245,6 +254,8 @@
             <nav class="flex-1 px-4 py-4 space-y-3">
                 <a href="#home" class="nav-link flex items-center px-4 py-3 text-lg font-medium text-gray-300 rounded-lg" data-lang-key="navHome">首页</a>
                 <a href="#science" class="nav-link flex items-center px-4 py-3 text-lg font-medium text-gray-300 rounded-lg" data-lang-key="navScience">科学</a>
+                <a href="#bait-science" class="nav-link flex items-center px-4 py-3 text-lg font-medium text-gray-300 rounded-lg" data-lang-key="navBaitScience">鱼饵</a>
+                <a href="#rod-selection" class="nav-link flex items-center px-4 py-3 text-lg font-medium text-gray-300 rounded-lg" data-lang-key="navRodSelection">鱼竿</a>
                 <a href="#quiz" class="nav-link flex items-center px-4 py-3 text-lg font-medium text-gray-300 rounded-lg" data-lang-key="navQuiz">测验</a>
                 <a href="#pro-tips" class="nav-link flex items-center px-4 py-3 text-lg font-medium text-gray-300 rounded-lg" data-lang-key="navProTips">秘籍</a>
             </nav>
@@ -338,6 +349,40 @@
                          </div>
                     </div>
                 </section>
+                
+                <!-- Bait Science Section -->
+                <section id="bait-science" class="content-section hidden">
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-center text-white mb-8 animate-on-scroll" data-lang-key="baitScienceTitle">鱼饵科学</h2>
+                    <p class="text-lg text-center text-gray-300 max-w-3xl mx-auto mb-12 animate-on-scroll" data-lang-key="baitScienceIntro">选择正确的鱼饵是成功的一半。了解不同鱼饵的原理，让你的选择更科学。</p>
+                    <div class="space-y-6 max-w-4xl mx-auto">
+                        <div class="glass-ui ripple-interactive p-6 animate-on-scroll">
+                            <h3 class="text-2xl font-bold mb-3 text-white" data-lang-key="naturalBaitTitle">1. 自然饵料 (Natural Baits)</h3>
+                            <p class="text-gray-300" data-lang-key="naturalBaitText">自然饵料（如蠕虫、昆虫、小鱼）的最大优势在于其真实的气味和质地，这能最有效地激发鱼的捕食本能。鱼类通过嗅觉和味觉来定位食物，自然饵料释放的化学信号是它们最熟悉、最无法抗拒的。</p>
+                        </div>
+                        <div class="glass-ui ripple-interactive p-6 animate-on-scroll">
+                            <h3 class="text-2xl font-bold mb-3 text-white" data-lang-key="luresTitle">2. 拟饵 (Artificial Lures)</h3>
+                            <p class="text-gray-300" data-lang-key="luresText">拟饵通过模仿猎物的外形、颜色和动作来吸引鱼类。<strong>旋转亮片 (Spinners)</strong> 通过旋转的金属片产生闪光和振动。<strong>硬体饵 (Plugs)</strong> 模仿小鱼，有不同的泳层和动作。<strong>软体饵 (Soft Plastics)</strong> 质地柔软，形态多变，可以模仿蠕虫、小虾等多种生物。</p>
+                        </div>
+                         <div class="glass-ui ripple-interactive p-6 animate-on-scroll">
+                            <h3 class="text-2xl font-bold mb-3 text-white" data-lang-key="scentTitle">3. 气味诱鱼剂 (Scent Attractants)</h3>
+                            <p class="text-gray-300" data-lang-key="scentText">气味诱鱼剂是浓缩的化学信息素，可以涂抹在自然饵或拟饵上，以增强其吸引力。它们能掩盖人类的气味，并长时间在水中散发诱鱼信号，在鱼类活性不高时尤其有效。</p>
+                        </div>
+                         <div class="glass-ui ripple-interactive p-6 animate-on-scroll">
+                            <h3 class="text-2xl font-bold mb-3 text-white" data-lang-key="presentationTitle">4. 呈现技巧 (Bait Presentation)</h3>
+                            <p class="text-gray-300" data-lang-key="presentationText">如何呈现鱼饵和鱼饵本身同样重要。<strong>Jigging (跳底)</strong> 是一种上下提拉的技巧，模仿垂死挣扎的猎物。<strong>Trolling (拖钓)</strong> 是让船拖动拟饵，使其在特定水层游动，适合大范围搜索。正确的呈现方式能让你的鱼饵“活”起来。</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Rod Selection Section -->
+                <section id="rod-selection" class="content-section hidden">
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-center text-white mb-8 animate-on-scroll" data-lang-key="rodSelectionTitle">鱼竿选择</h2>
+                    <div class="glass-ui ripple-interactive p-8 md:p-12 animate-on-scroll">
+                        <div id="rod-selection-content" class="text-gray-300 space-y-4">
+                            <!-- Content will be injected by JS -->
+                        </div>
+                    </div>
+                </section>
 
                 <!-- Quiz Section -->
                 <section id="quiz" class="content-section hidden">
@@ -355,13 +400,6 @@
                     <h2 class="text-4xl md:text-5xl font-extrabold text-center text-white mb-8 animate-on-scroll" data-lang-key="proTipsTitle">高手秘籍：成为负责任的垂钓者</h2>
                      <p class="text-lg text-center text-gray-300 max-w-3xl mx-auto mb-12 animate-on-scroll" data-lang-key="proTipsIntro">垂钓不仅是技巧，更是一份责任。遵循这些建议，享受乐趣的同时，也保护我们珍贵的水生资源。</p>
                     <div class="space-y-6 max-w-4xl mx-auto">
-                        <div class="accordion-item glass-ui ripple-interactive animate-on-scroll">
-                            <button class="accordion-header w-full text-left p-6 flex justify-between items-center">
-                                <span class="text-xl font-semibold text-white" data-lang-key="rodSelectionTitle">🎣 鱼竿选择</span>
-                                <span class="text-2xl transform transition-transform duration-300">+</span>
-                            </button>
-                            <div class="accordion-content p-6"></div>
-                        </div>
                         <div class="accordion-item glass-ui ripple-interactive animate-on-scroll">
                             <button class="accordion-header w-full text-left p-6 flex justify-between items-center">
                                 <span class="text-xl font-semibold text-white" data-lang-key="onSiteProcessTitle">📝 现场流程与建议携带</span>
@@ -399,6 +437,14 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 22h13c.8 0 1.5-.7 1.5-1.5v-13c0-.8-.7-1.5-1.5-1.5h-13c-.8 0-1.5.7-1.5 1.5v13c0 .8.7 1.5 1.5 1.5z"/><path d="M4 6h16"/><path d="M10 2v4"/><path d="M14 2v4"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/><path d="M8 16h.01"/><path d="M12 16h.01"/><path d="M16 16h.01"/></svg>
             <span data-lang-key="navScience">科学</span>
         </a>
+        <a href="#bait-science" class="bottom-nav-item" data-nav-section="bait-science">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-fish"><path d="M6.5 12c.9 0 1.6.3 2.2.8.6.5.9 1.2.9 2.2s-.3 1.7-.9 2.2c-.6.5-1.3.8-2.2.8s-1.6-.3-2.2-.8C3.7 16.7 3.4 16 3.4 15s.3-1.7.9-2.2c.6-.5 1.3-.8 2.2-.8z"/><path d="m21.6 12.2-7.4-7.4C13.6 4.2 12.8 4 12 4s-1.6.2-2.2.8L2.4 12.2c-.6.6-.8 1.3-.8 2.2s.2 1.6.8 2.2l7.4 7.4c.6.6 1.3.8 2.2.8s1.6-.2 2.2-.8l7.4-7.4c.6-.6.8-1.3.8-2.2s-.2-1.6-.8-2.2z"/></svg>
+            <span data-lang-key="navBaitScience">鱼饵</span>
+        </a>
+        <a href="#rod-selection" class="bottom-nav-item" data-nav-section="rod-selection">
+             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-grip-vertical"><circle cx="9" cy="12" r="1" /><circle cx="9" cy="5" r="1" /><circle cx="9" cy="19" r="1" /><circle cx="15" cy="12" r="1" /><circle cx="15" cy="5" r="1" /><circle cx="15" cy="19" r="1" /></svg>
+            <span data-lang-key="navRodSelection">鱼竿</span>
+        </a>
         <a href="#quiz" class="bottom-nav-item" data-nav-section="quiz">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
             <span data-lang-key="navQuiz">测验</span>
@@ -428,7 +474,7 @@
             const translations = {
                 en: {
                     sidebarTitle: "🎣 Fishing Guide",
-                    navHome: "Home", navScience: "Science", navProTips: "Pro Tips", navQuiz: "Quiz",
+                    navHome: "Home", navScience: "Science", navBaitScience: "Baits", navRodSelection: "Rods", navProTips: "Pro Tips", navQuiz: "Quiz",
                     homeTitle: "Welcome to Your \"Hook & Cook\" Adventure!",
                     homeIntro: "\"Hook & Cook\" fisheries offer a unique experience... helping you grow from a casual angler into an \"angling scientist\". Ready to start your adventure?",
                     fishSpeciesTitle: "Meet the Fish: Common Residents",
@@ -447,6 +493,16 @@
                     scienceChemo: `<p class="mb-4">Fish have extremely sensitive smell and taste, detecting minute chemicals (amino acids). Taste buds can be all over their bodies (catfish barbels)!</p><p><strong>Application:</strong> The <strong>scent</strong> of bait is crucial. Natural baits (chicken liver, cut fish) release strong chemical signals. "Stink baits" for catfish are highly effective.</p>`,
                     tabLateral: "〰️ Lateral Line: Sixth Sense",
                     scienceLateral: `<p class="mb-4">The lateral line detects vibrations and pressure changes. It's a "sixth sense" for perceiving prey, obstacles, or predators without clear sight.</p><p><strong>Application:</strong> The lure's <strong>action</strong> and vibrations are as important as color/scent. Lures mimicking struggling baitfish can trigger attacks, especially in murky water or at night.</p>`,
+                    baitScienceTitle: "Bait Science",
+                    baitScienceIntro: "Choosing the right bait is half the battle. Understand the principles behind different baits to make your choice more scientific.",
+                    naturalBaitTitle: "1. Natural Baits",
+                    naturalBaitText: "The biggest advantage of natural baits (like worms, insects, small fish) is their authentic scent and texture, which most effectively stimulate a fish's predatory instincts. Fish use smell and taste to locate food, and the chemical signals released by natural baits are the most familiar and irresistible to them.",
+                    luresTitle: "2. Artificial Lures",
+                    luresText: "Artificial lures attract fish by imitating the appearance, color, and movement of prey. <strong>Spinners</strong> create flashes and vibrations with a rotating metal blade. <strong>Plugs</strong> imitate small fish and have different swimming depths and actions. <strong>Soft Plastics</strong> have a soft texture and versatile shapes, mimicking worms, shrimp, and other creatures.",
+                    scentTitle: "3. Scent Attractants",
+                    scentText: "Scent attractants are concentrated chemical pheromones that can be applied to natural or artificial baits to enhance their appeal. They can mask human scents and release long-lasting fish-attracting signals in the water, which is especially effective when fish are less active.",
+                    presentationTitle: "4. Bait Presentation",
+                    presentationText: "How you present the bait is as important as the bait itself. <strong>Jigging</strong> is an up-and-down retrieval technique that mimics a dying, struggling prey. <strong>Trolling</strong> involves pulling a lure behind a boat, allowing it to swim at a specific depth, which is suitable for searching large areas. The right presentation makes your bait come alive.",
                     baitRecommenderTitle: "Interactive Bait Recommender",
                     baitRecommenderIntro: "Not sure what bait to use? Select your target fish species!",
                     selectFishPrompt: "Please select a fish...",
@@ -459,7 +515,8 @@
                     proTipsTitle: "Pro Tips: Responsible Angling",
                     proTipsIntro: "Angling is not just about skill, but also responsibility. Follow these tips to enjoy the fun while protecting our precious aquatic resources.",
                     rodSelectionTitle: "🎣 Rod Selection",
-                    proTipsRodSelection: `<p class="mb-4">Choosing the right rod is crucial for success and enjoyment. Here's a breakdown of key factors:</p> <h4 class="font-bold text-lg mt-4 mb-2 text-white">1. Length</h4> <p>Rod length affects casting distance and accuracy. Longer rods (7ft+) cast farther, ideal for open water. Shorter rods (under 7ft) offer more accuracy, great for tight spots.</p> <h4 class="font-bold text-lg mt-4 mb-2 text-white">2. Power</h4> <p>Power describes the rod's strength or lifting power. It ranges from Ultra-Light (UL) for small fish to Extra-Heavy (XH) for large game fish.</p> <h4 class="font-bold text-lg mt-4 mb-2 text-white">3. Action</h4> <p>Action determines how much the rod bends. <strong>Fast Action</strong> rods bend at the top third, offering sensitivity and quick hook sets. <strong>Medium Action</strong> rods bend in the top half, good for versatility. <strong>Slow Action</strong> rods bend almost to the handle, ideal for casting light lures and absorbing shock from strong fish.</p> <table class="pro-tips-table"><thead><tr><th>Power</th><th>Target Fish</th><th>Action</th><th>Best Use</th></tr></thead><tbody><tr><td>Light (L)</td><td>Tilapia, Pacu (small)</td><td>Medium/Slow</td><td>Casting small baits, fun fight</td></tr><tr><td>Medium (M)</td><td>Barramundi, Snapper</td><td>Fast/Medium</td><td>All-around versatility</td></tr><tr><td>Heavy (H)</td><td>Catfish (large)</td><td>Fast</td><td>Heavy cover, strong hook sets</td></tr></tbody></table>`,
+                    rodSelectionIntro: "Choosing the right rod is crucial for success and enjoyment. Here's a breakdown of key factors:",
+                    proTipsRodSelection: `<h4 class="font-bold text-lg mt-4 mb-2 text-white">1. Length</h4> <p>Rod length affects casting distance and accuracy. Longer rods (7ft+) cast farther, ideal for open water. Shorter rods (under 7ft) offer more accuracy, great for tight spots.</p> <h4 class="font-bold text-lg mt-4 mb-2 text-white">2. Power</h4> <p>Power describes the rod's strength or lifting power. It ranges from Ultra-Light (UL) for small fish to Extra-Heavy (XH) for large game fish.</p> <h4 class="font-bold text-lg mt-4 mb-2 text-white">3. Action</h4> <p>Action determines how much the rod bends. <strong>Fast Action</strong> rods bend at the top third, offering sensitivity and quick hook sets. <strong>Medium Action</strong> rods bend in the top half, good for versatility. <strong>Slow Action</strong> rods bend almost to the handle, ideal for casting light lures and absorbing shock from strong fish.</p> <table class="pro-tips-table"><thead><tr><th>Power</th><th>Target Fish</th><th>Action</th><th>Best Use</th></tr></thead><tbody><tr><td>Light (L)</td><td>Tilapia, Pacu (small)</td><td>Medium/Slow</td><td>Casting small baits, fun fight</td></tr><tr><td>Medium (M)</td><td>Barramundi, Snapper</td><td>Fast/Medium</td><td>All-around versatility</td></tr><tr><td>Heavy (H)</td><td>Catfish (large)</td><td>Fast</td><td>Heavy cover, strong hook sets</td></tr></tbody></table>`,
                     onSiteProcessTitle: "📝 On-site Process & What to Bring",
                     proTipsOnSite: `<h4 class="font-bold text-lg mb-2 text-white">Suggested Process</h4><ol class="list-decimal list-inside space-y-1"><li>Register at the counter, state it's your first time, rent rods.</li><li>Inform staff you have children for a suitable pond.</li><li>Fish for 1–2 hours.</li><li>Kitchen can cook your catch (or pack it).</li></ol><h4 class="font-bold text-lg mt-4 mb-2 text-white">What to Bring</h4><ul class="list-disc list-inside space-y-1"><li>Sun hat / Umbrella.</li><li>Mosquito repellent.</li><li>Power bank.</li></ul>`,
                     catchReleaseTitle: "💚 \"Catch & Release\" Best Practices",
@@ -469,7 +526,7 @@
                 },
                 zh: {
                     sidebarTitle: "🎣 钓鱼指南",
-                    navHome: "首页", navScience: "科学", navProTips: "秘籍", navQuiz: "测验",
+                    navHome: "首页", navScience: "科学", navBaitScience: "鱼饵", navRodSelection: "鱼竿", navProTips: "秘籍", navQuiz: "测验",
                     homeTitle: "欢迎来到“钓获烹饪”探险之旅！",
                     homeIntro: "“钓获烹饪”(Hook & Cook) 渔场提供了一种独特的体验：亲手钓起鱼，然后立即在现场餐厅享用新鲜烹制的渔获。这不仅是垂钓的乐趣，更是运动、自然与美食的完美结合。本指南将带你深入探索鱼类生物学的奥秘，从了解鱼的感官到科学选择饵料，让你从普通垂钓者成长为一名对水生生物有深入理解的“垂钓科学家”。准备好开始你的探险了吗？",
                     fishSpeciesTitle: "认识鱼儿：马来西亚渔场常见居民",
@@ -488,6 +545,16 @@
                     scienceChemo: `<p class="mb-4">鱼类的嗅觉和味觉极其灵敏，可以探测到溶解在水里极微量的化学物质（如氨基酸）。它们的味蕾不仅在嘴里，甚至遍布全身（特别是鲶鱼的触须上）！这意味着它们能“尝到”任何接触到的东西。</p><p><strong>应用：</strong> 饵料的<strong>气味</strong>至关重要。天然饵料（如鸡肝、鱼块）会释放强烈的化学信号，对鱼有致命的吸引力。这就是为什么为鲶鱼设计的“臭饵”如此有效。</p>`,
                     tabLateral: "〰️ 侧线：第六感",
                     scienceLateral: `<p class="mb-4">侧线是鱼身体两侧的一排感觉器官，能探测到水中的振动和压力变化。这是鱼的“第六感”，让它们在看不清的情况下也能感知到猎物、障碍物或捕食者。</p><p><strong>应用：</strong> 拟饵的<strong>动作</strong>和它在水中产生的<strong>振动</strong>，其重要性不亚于颜色和气味。能模仿受伤小鱼挣扎或昆虫游动所产生振动的拟饵，能有效触发鱼的攻击欲望，尤其是在浑水或夜钓时。</p>`,
+                    baitScienceTitle: "鱼饵科学",
+                    baitScienceIntro: "选择正确的鱼饵是成功的一半。了解不同鱼饵的原理，让你的选择更科学。",
+                    naturalBaitTitle: "1. 自然饵料 (Natural Baits)",
+                    naturalBaitText: "自然饵料（如蠕虫、昆虫、小鱼）的最大优势在于其真实的气味和质地，这能最有效地激发鱼的捕食本能。鱼类通过嗅觉和味觉来定位食物，自然饵料释放的化学信号是它们最熟悉、最无法抗拒的。",
+                    luresTitle: "2. 拟饵 (Artificial Lures)",
+                    luresText: "拟饵通过模仿猎物的外形、颜色和动作来吸引鱼类。<strong>旋转亮片 (Spinners)</strong> 通过旋转的金属片产生闪光和振动。<strong>硬体饵 (Plugs)</strong> 模仿小鱼，有不同的泳层和动作。<strong>软体饵 (Soft Plastics)</strong> 质地柔软，形态多变，可以模仿蠕虫、小虾等多种生物。",
+                    scentTitle: "3. 气味诱鱼剂 (Scent Attractants)",
+                    scentText: "气味诱鱼剂是浓缩的化学信息素，可以涂抹在自然饵或拟饵上，以增强其吸引力。它们能掩盖人类的气味，并长时间在水中散发诱鱼信号，在鱼类活性不高时尤其有效。",
+                    presentationTitle: "4. 呈现技巧 (Bait Presentation)",
+                    presentationText: "如何呈现鱼饵和鱼饵本身同样重要。<strong>Jigging (跳底)</strong> 是一种上下提拉的技巧，模仿垂死挣扎的猎物。<strong>Trolling (拖钓)</strong> 是让船拖动拟饵，使其在特定水层游动，适合大范围搜索。正确的呈现方式能让你的鱼饵“活”起来。",
                     baitRecommenderTitle: "互动式饵料推荐器",
                     baitRecommenderIntro: "不知道用什么饵料？选择你想要钓的目标鱼种，让我来为你推荐！",
                     selectFishPrompt: "请先选择一种鱼...",
@@ -500,7 +567,8 @@
                     proTipsTitle: "高手秘籍：成为负责任的垂钓者",
                     proTipsIntro: "垂钓不仅是技巧，更是一份责任。遵循这些建议，享受乐趣的同时，也保护我们珍贵的水生资源。",
                     rodSelectionTitle: "🎣 鱼竿选择",
-                    proTipsRodSelection: `<p class="mb-4">选择合适的鱼竿对成功和乐趣至关重要。以下是关键因素的解析：</p> <h4 class="font-bold text-lg mt-4 mb-2 text-white">1. 长度 (Length)</h4> <p>鱼竿长度影响抛投距离和精度。长竿（7英尺以上）投得更远，适合开阔水域。短竿（7英尺以下）更精确，适合狭窄空间。</p> <h4 class="font-bold text-lg mt-4 mb-2 text-white">2. 硬度 (Power)</h4> <p>硬度描述了鱼竿的强度或起重能力。范围从用于小鱼的超软（UL）到用于大型游钓鱼的超硬（XH）。</p> <h4 class="font-bold text-lg mt-4 mb-2 text-white">3. 调性 (Action)</h4> <p>调性决定了鱼竿弯曲的位置。<strong>快调 (Fast)</strong> 竿在顶部三分之一处弯曲，提供高灵敏度和快速的刺鱼动作。<strong>中调 (Medium)</strong> 竿在上半部分弯曲，通用性好。<strong>慢调 (Slow)</strong> 竿几乎弯曲到手柄，适合抛投轻饵和缓冲大鱼的冲击。</p> <table class="pro-tips-table"><thead><tr><th>硬度</th><th>目标鱼</th><th>调性</th><th>最佳用途</th></tr></thead><tbody><tr><td>L (软)</td><td>罗非鱼、小巴古</td><td>中/慢</td><td>抛投小饵，享受搏鱼乐趣</td></tr><tr><td>M (中)</td><td>尖吻鲈、笛鲷</td><td>快/中</td><td>全能型，适用性广</td></tr><tr><td>H (硬)</td><td>大鲶鱼</td><td>快</td><td>重障碍区，强力刺鱼</td></tr></tbody></table>`,
+                    rodSelectionIntro: "选择合适的鱼竿对成功和乐趣至关重要。以下是关键因素的解析：",
+                    proTipsRodSelection: `<h4 class="font-bold text-lg mt-4 mb-2 text-white">1. 长度 (Length)</h4> <p>鱼竿长度影响抛投距离和精度。长竿（7英尺以上）投得更远，适合开阔水域。短竿（7英尺以下）更精确，适合狭窄空间。</p> <h4 class="font-bold text-lg mt-4 mb-2 text-white">2. 硬度 (Power)</h4> <p>硬度描述了鱼竿的强度或起重能力。范围从用于小鱼的超软（UL）到用于大型游钓鱼的超硬（XH）。</p> <h4 class="font-bold text-lg mt-4 mb-2 text-white">3. 调性 (Action)</h4> <p>调性决定了鱼竿弯曲的位置。<strong>快调 (Fast)</strong> 竿在顶部三分之一处弯曲，提供高灵敏度和快速的刺鱼动作。<strong>中调 (Medium)</strong> 竿在上半部分弯曲，通用性好。<strong>慢调 (Slow)</strong> 竿几乎弯曲到手柄，适合抛投轻饵和缓冲大鱼的冲击。</p> <table class="pro-tips-table"><thead><tr><th>硬度</th><th>目标鱼</th><th>调性</th><th>最佳用途</th></tr></thead><tbody><tr><td>L (软)</td><td>罗非鱼、小巴古</td><td>中/慢</td><td>抛投小饵，享受搏鱼乐趣</td></tr><tr><td>M (中)</td><td>尖吻鲈、笛鲷</td><td>快/中</td><td>全能型，适用性广</td></tr><tr><td>H (硬)</td><td>大鲶鱼</td><td>快</td><td>重障碍区，强力刺鱼</td></tr></tbody></table>`,
                     onSiteProcessTitle: "📝 现场流程与建议携带",
                     proTipsOnSite: `<h4 class="font-bold text-lg mb-2 text-white">建议流程</h4><ol class="list-decimal list-inside space-y-1"><li>到前台登记，说明是初次体验，可租用钓竿。</li><li>告诉工作人员有小孩，他们会安排适合的水池。</li><li>钓鱼1–2小时（鱼饵用完可续买）。</li><li>钓到的鱼若想吃，可请厨房代为烹饪（或打包）。</li></ol><h4 class="font-bold text-lg mt-4 mb-2 text-white">建议携带</h4><ul class="list-disc list-inside space-y-1"><li>防晒帽 / 雨伞。</li><li>驱蚊液。</li><li>手机充电宝。</li></ul>`,
                     catchReleaseTitle: "💚 “钓后放流”最佳实践",
@@ -510,7 +578,7 @@
                 },
                 ml: {
                     sidebarTitle: "🎣 Panduan Memancing",
-                    navHome: "Utama", navScience: "Sains", navProTips: "Petua", navQuiz: "Kuiz",
+                    navHome: "Utama", navScience: "Sains", navBaitScience: "Umpan", navRodSelection: "Joran", navProTips: "Petua", navQuiz: "Kuiz",
                     homeTitle: "Selamat Datang ke Pengembaraan \"Hook & Cook\" Anda!",
                     homeIntro: "Kolam pancing \"Hook & Cook\" menawarkan pengalaman unik... membantu anda berkembang daripada pemancing biasa menjadi \"saintis memancing\". Bersedia untuk memulakan pengembaraan anda?",
                     fishSpeciesTitle: "Kenali Ikan: Penduduk Biasa",
@@ -529,6 +597,16 @@
                     scienceChemo: `<p class="mb-4">Ikan mempunyai deria bau dan rasa yang sangat sensitif, mengesan bahan kimia kecil (asid amino). Tunas rasa boleh berada di seluruh badan mereka (misai ikan keli)!</p><p><strong>Aplikasi:</strong> <strong>Bau</strong> umpan adalah penting. Umpan semula jadi (hati ayam, potongan ikan) mengeluarkan isyarat kimia yang kuat. "Umpan busuk" untuk ikan keli sangat berkesan.</p>`,
                     tabLateral: "〰️ Garis Lateral: Deria Keenam",
                     scienceLateral: `<p class="mb-4">Garis lateral mengesan getaran dan perubahan tekanan. Ia adalah "deria keenam" untuk mengesan mangsa, halangan, atau pemangsa tanpa penglihatan yang jelas.</p><p><strong>Aplikasi:</strong> <strong>Tindakan</strong> umpan dan getaran adalah sama penting dengan warna/bau. Umpan yang meniru ikan umpan yang bergelut boleh mencetuskan serangan, terutamanya di air keruh atau pada waktu malam.</p>`,
+                    baitScienceTitle: "Sains Umpan",
+                    baitScienceIntro: "Memilih umpan yang betul adalah separuh daripada kejayaan. Fahami prinsip di sebalik umpan yang berbeza untuk membuat pilihan anda lebih saintifik.",
+                    naturalBaitTitle: "1. Umpan Semula Jadi",
+                    naturalBaitText: "Kelebihan terbesar umpan semula jadi (seperti cacing, serangga, ikan kecil) adalah bau dan tekstur asli mereka, yang paling berkesan merangsang naluri pemangsa ikan. Ikan menggunakan bau dan rasa untuk mencari makanan, dan isyarat kimia yang dikeluarkan oleh umpan semula jadi adalah yang paling biasa dan tidak dapat ditolak oleh mereka.",
+                    luresTitle: "2. Umpan Tiruan",
+                    luresText: "Umpan tiruan menarik ikan dengan meniru rupa, warna, dan pergerakan mangsa. <strong>Spinners</strong> mencipta kilauan dan getaran dengan bilah logam yang berputar. <strong>Plugs</strong> meniru ikan kecil dan mempunyai kedalaman dan aksi renang yang berbeza. <strong>Plastik Lembut</strong> mempunyai tekstur lembut dan bentuk serba boleh, meniru cacing, udang, dan makhluk lain.",
+                    scentTitle: "3. Penarik Bau",
+                    scentText: "Penarik bau adalah feromon kimia pekat yang boleh disapu pada umpan semula jadi atau tiruan untuk meningkatkan daya tarikannya. Ia boleh menutup bau manusia dan melepaskan isyarat menarik ikan yang tahan lama di dalam air, yang sangat berkesan apabila ikan kurang aktif.",
+                    presentationTitle: "4. Persembahan Umpan",
+                    presentationText: "Cara anda mempersembahkan umpan adalah sama pentingnya dengan umpan itu sendiri. <strong>Jigging</strong> adalah teknik tarikan ke atas dan ke bawah yang meniru mangsa yang sedang nazak dan bergelut. <strong>Trolling</strong> melibatkan menarik umpan di belakang bot, membolehkannya berenang pada kedalaman tertentu, yang sesuai untuk mencari di kawasan yang luas. Persembahan yang betul menjadikan umpan anda 'hidup'.",
                     baitRecommenderTitle: "Pencadang Umpan Interaktif",
                     baitRecommenderIntro: "Tidak pasti umpan apa yang hendak digunakan? Pilih spesies ikan sasaran anda!",
                     selectFishPrompt: "Sila pilih ikan...",
@@ -757,10 +835,10 @@
 
                 if (activeSection) {
                     activeSection.classList.remove('hidden');
-                    setTimeout(() => {
+                    requestAnimationFrame(() => {
                         activeSection.classList.add('active');
                         observeAnimations(activeSection);
-                    }, 50);
+                    });
                 }
             }
 
@@ -776,9 +854,17 @@
                 renderFishGallery();
                 updateScienceContent();
                 updateProTipsContent();
+                updateRodSelectionContent();
                 renderBaitRecommender();
                 updateChart();
                 renderQuiz();
+            }
+            
+            function updateRodSelectionContent() {
+                const contentDiv = document.getElementById('rod-selection-content');
+                if(contentDiv) {
+                    contentDiv.innerHTML = translations[currentLanguage].proTipsRodSelection;
+                }
             }
 
             function initFishChart() {
@@ -887,7 +973,6 @@
             
             function updateProTipsContent() {
                 const mapping = { 
-                    rodSelectionTitle: 'proTipsRodSelection',
                     onSiteProcessTitle: 'proTipsOnSite', 
                     catchReleaseTitle: 'proTipsCatchRelease', 
                     environmentalResponsibilityTitle: 'proTipsEnvResp' 
@@ -1072,19 +1157,3 @@
     </script>
 </body>
 </html>
-" from the immersive artifact "交互式钓鱼指南 - 终极涟漪版 (已修复)" with id "fishing_guide_ripple_demo" and am asking a query about/based on this code below.
-Instructions to follow:
-  * Don't output/edit the document if the query is Direct/Simple. For example, if the query asks for a simple explanation, output a direct answer.
-  * Make sure to **edit** the document if the query shows the intent of editing the document, in which case output the entire edited document, **not just that section or the edits**.
-    * Don't output the same document/empty document and say that you have edited it.
-    * Don't change unrelated code in the document.
-  * Don't output  and  in your final response.
-  * Any references like "this" or "selected code" refers to the code between  and  tags.
-  * Just acknowledge my request in the introduction.
-  * Make sure to refer to the document as "Canvas" in your response.
-
-Add a new section called "Bait Science" with the following content:
-1.  **Natural Baits**: Discuss the advantages of using natural baits like worms, insects, and small fish, emphasizing their scent and texture.
-2.  **Artificial Lures**: Explain the different types of artificial lures (e.g., spinners, plugs, soft plastics) and their respective applications.
-3.  **Scent Attractants**: Describe how scent attractants can be used to enhance the effectiveness of both natural and artificial baits.
-4.  **Bait Presentation**: Provide tips on how to present bait in a way that is most appealing to fish, including techniques like jigging and trolli
