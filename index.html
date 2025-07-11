@@ -235,6 +235,24 @@
             header.md\:hidden { display: none !important; }
             .bottom-nav { display: none; }
         }
+
+        /* Ripple Effect for Mobile Touch */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-effect 0.8s ease-out;
+            background-color: rgba(255, 255, 255, 0.4); /* Semi-transparent white for the ripple */
+            pointer-events: none; /* Make sure it doesn't interfere with clicks */
+            z-index: 9999; /* Ensure it's on top */
+        }
+
+        @keyframes ripple-effect {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -253,13 +271,13 @@
                 </div>
             </div>
             <div class="flex items-center justify-center h-20 shadow-md bg-[var(--bg-secondary)]">
-                <h1 class="text-xl font-bold text-[var(--text-primary)]" data-lang-key="sidebarTitle">🎣 Fishing Guide</h1>
+                <h1 class="text-xl font-bold text-[var(--text-primary)]" data-lang-key="sidebarTitle">🎣 钓鱼指南</h1>
             </div>
             <nav class="flex-1 px-2 py-4 space-y-2">
-                <a href="#home" class="nav-link flex items-center px-4 py-2 text-lg font-medium text-[var(--text-secondary)] rounded-md" data-lang-key="navHome">Home</a>
-                <a href="#science" class="nav-link flex items-center px-4 py-2 text-lg font-medium text-[var(--text-secondary)] rounded-md" data-lang-key="navScience">The Science of Fishing</a>
-                <a href="#quiz" class="nav-link flex items-center px-4 py-2 text-lg font-medium text-[var(--text-secondary)] rounded-md" data-lang-key="navQuiz">Quiz</a>
-                <a href="#pro-tips" class="nav-link flex items-center px-4 py-2 text-lg font-medium text-[var(--text-secondary)] rounded-md" data-lang-key="navProTips">Pro Tips</a>
+                <a href="#home" class="nav-link flex items-center px-4 py-2 text-lg font-medium text-[var(--text-secondary)] rounded-md" data-lang-key="navHome">首页</a>
+                <a href="#science" class="nav-link flex items-center px-4 py-2 text-lg font-medium text-[var(--text-secondary)] rounded-md" data-lang-key="navScience">科学</a>
+                <a href="#quiz" class="nav-link flex items-center px-4 py-2 text-lg font-medium text-[var(--text-secondary)] rounded-md" data-lang-key="navQuiz">测验</a>
+                <a href="#pro-tips" class="nav-link flex items-center px-4 py-2 text-lg font-medium text-[var(--text-secondary)] rounded-md" data-lang-key="navProTips">秘籍</a>
             </nav>
         </aside>
 
@@ -277,23 +295,32 @@
                 </div>
                 <!-- Title on the right (no mobile menu button needed as bottom nav is primary) -->
                 <div class="flex-1 flex justify-end items-center">
-                    <h1 class="text-xl font-bold text-[var(--text-primary)]" data-lang-key="sidebarTitle">🎣 Fishing Guide</h1>
+                    <h1 class="text-xl font-bold text-[var(--text-primary)]" data-lang-key="sidebarTitle">🎣 钓鱼指南</h1>
                 </div>
             </header>
 
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-[var(--bg-main)] p-4 sm:p-6 md:p-8">
                 <!-- Home Section (now includes Meet the Fish) -->
                 <section id="home" class="content-section">
-                    <!-- Meet the Fish content moved here to the very top -->
+                    <div class="bg-[var(--bg-secondary)] rounded-lg shadow p-8 text-center mb-8">
+                        <h2 class="text-4xl font-bold text-[var(--text-primary)] mb-4" data-lang-key="homeTitle">欢迎来到“钓获烹饪”探险之旅！</h2>
+                        <p class="text-lg text-[var(--text-secondary)] leading-relaxed max-w-3xl mx-auto" data-lang-key="homeIntro">
+                            “钓获烹饪”(Hook & Cook) 渔场提供了一种独特的体验：亲手钓起鱼，然后立即在现场餐厅享用新鲜烹制的渔获。这不仅是垂钓的乐趣，更是运动、自然与美食的完美结合。本指南将带你深入探索鱼类生物学的奥秘，从了解鱼的感官到科学选择饵料，让你从普通垂钓者成长为一名对水生生物有深入理解的“垂钓科学家”。准备好开始你的探险了吗？
+                        </p>
+                        <!-- Ripple Hint for Mobile -->
+                        <p class="md:hidden text-sm text-[var(--highlight)] mt-6 animate-pulse" data-lang-key="rippleHint">轻点背景，有惊喜！</p>
+                    </div>
+
+                    <!-- Meet the Fish content moved here -->
                     <div class="bg-[var(--bg-secondary)] rounded-lg shadow p-8 mb-8">
-                        <h2 class="text-4xl font-bold text-center text-[var(--text-primary)] mb-8" data-lang-key="fishSpeciesTitle">Meet the Fish: Common Residents of Malaysian Fisheries</h2>
-                        <p class="text-lg text-center text-[var(--text-secondary)] max-w-3xl mx-auto mb-12" data-lang-key="fishSpeciesIntro">Malaysian recreational fisheries host a diverse range of fish species. Understanding their biological characteristics is crucial for successful angling. Click on the cards below to view detailed profiles for each fish.</p>
+                        <h2 class="text-4xl font-bold text-center text-[var(--text-primary)] mb-8" data-lang-key="fishSpeciesTitle">认识鱼儿：马来西亚渔场常见居民</h2>
+                        <p class="text-lg text-center text-[var(--text-secondary)] max-w-3xl mx-auto mb-12" data-lang-key="fishSpeciesIntro">马来西亚的休闲渔场拥有多种鱼类。了解它们的生物特性是成功垂钓的关键。点击下方的卡片，查看每种鱼的详细档案。</p>
                         <div id="fish-gallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                             <!-- Fish cards will be injected here by JS -->
                         </div>
                         <div class="mt-12 bg-white rounded-lg shadow p-8"> <!-- Changed to bg-white -->
-                            <h3 class="text-2xl font-bold text-center mb-2 text-[var(--text-primary-dark)]" data-lang-key="fishComparisonTitle">Fish Characteristics Comparison</h3>
-                            <p class="text-md text-center text-[var(--text-secondary-dark)] mb-2" data-lang-key="fishComparisonIntro">Compare key characteristics of different fish species visually using this radar chart.</p>
+                            <h3 class="text-2xl font-bold text-center mb-2 text-[var(--text-primary-dark)]" data-lang-key="fishComparisonTitle">鱼类特性对比</h3>
+                            <p class="text-md text-center text-[var(--text-secondary-dark)] mb-2" data-lang-key="fishComparisonIntro">通过这个雷达图，直观地比较不同鱼类的关键特性。</p>
                             <!-- OPTIMIZATION: Added subtitle for chart scale explanation -->
                             <p class="text-xs text-center text-[var(--text-secondary-dark)] mb-4" data-lang-key="fishComparisonSubtitle"></p>
                             <div class="chart-container">
@@ -302,23 +329,16 @@
                         </div>
                     </div>
 
-                    <div class="bg-[var(--bg-secondary)] rounded-lg shadow p-8 text-center mb-8">
-                        <h2 class="text-4xl font-bold text-[var(--text-primary)] mb-4" data-lang-key="homeTitle">Welcome to Your "Hook & Cook" Adventure!</h2>
-                        <p class="text-lg text-[var(--text-secondary)] leading-relaxed max-w-3xl mx-auto" data-lang-key="homeIntro">
-                            "Hook & Cook" fisheries offer a unique experience: catch fish with your own hands, then immediately enjoy freshly cooked catches at the on-site restaurant. This is not just the joy of fishing, but a perfect blend of sport, nature, and gastronomy. This guide will take you deep into the mysteries of fish biology, from understanding fish senses to scientifically choosing baits, helping you grow from a casual angler into an "angling scientist" with a profound understanding of aquatic life. Ready to start your adventure?
-                        </p>
-                    </div>
-
                      <div class="mt-8 bg-[var(--bg-secondary)] rounded-lg shadow p-8">
-                        <h3 class="text-2xl font-bold text-center mb-6" data-lang-key="whatIsHookCookTitle">What is a "Hook & Cook" Fishery?</h3>
+                        <h3 class="text-2xl font-bold text-center mb-6" data-lang-key="whatIsHookCookTitle">什么是“钓获烹饪”渔场？</h3>
                         <div class="grid md:grid-cols-2 gap-8 text-[var(--text-secondary)] leading-relaxed">
                             <div>
-                                <h4 class="font-bold text-lg text-[var(--text-primary)] mb-2" data-lang-key="uniqueExperienceTitle">Unique Leisure Experience</h4>
-                                <p data-lang-key="uniqueExperienceText">These fisheries are venues specifically designed for recreational fishing, often converted from disused fish farms or purpose-built ponds, aiming to provide a unique leisure experience. Here, visitors can enjoy the thrill of fishing and choose to have their caught fish prepared by the on-site restaurant, offering a one-stop "catch-to-cook" service, providing an ideal fishing environment for families and beginners.</p>
+                                <h4 class="font-bold text-lg text-[var(--text-primary)] mb-2" data-lang-key="uniqueExperienceTitle">独特的休闲体验</h4>
+                                <p data-lang-key="uniqueExperienceText">这些渔场是专为休闲垂钓设计的场所，通常由废弃的养鱼场改造或专门建造。在这里，游客可以体验垂钓的乐趣，并将渔获交给餐厅烹饪，实现“从钓到吃”的一站式服务，为家庭和初学者提供了理想的垂钓环境。</p>
                             </div>
                             <div>
-                                <h4 class="font-bold text-lg text-[var(--text-primary)] mb-2" data-lang-key="typicalEnvironmentTitle">Typical Fishery Environment</h4>
-                                <p data-lang-key="typicalEnvironmentText">Many "Hook & Cook" fishing ponds in Malaysia are typically freshwater environments, surrounded by natural scenery, offering a tranquil recreational experience. Some ponds may also offer brackish water environments, where fish species like Barramundi and Snapper are reared. These places are usually well-equipped with facilities such as restaurants, tackle shops, and comfortable fishing huts.</p>
+                                <h4 class="font-bold text-lg text-[var(--text-primary)] mb-2" data-lang-key="typicalEnvironmentTitle">典型的渔场环境</h4>
+                                <p data-lang-key="typicalEnvironmentText">马来西亚的“钓获烹饪”渔场多为淡水环境，风光秀丽，宁静宜人。部分渔场也提供咸淡水环境，饲养着尖吻鲈、石斑鱼等鱼类。这些地方通常设施完善，配有餐厅、渔具店和舒适的垂钓小屋。</p>
                             </div>
                         </div>
                     </div>
@@ -326,32 +346,32 @@
 
                 <!-- Science of Fishing Section (now with accordions) -->
                 <section id="science" class="content-section hidden">
-                    <h2 class="text-4xl font-bold text-center text-[var(--text-primary)] mb-8" data-lang-key="scienceTitle">The Science of Fishing: Unraveling Fish Feeding Behavior</h2>
-                    <p class="text-lg text-center text-[var(--text-secondary)] max-w-3xl mx-auto mb-12" data-lang-key="scienceIntro">Fish possess highly developed sensory systems. Understanding how they perceive the world will allow you to choose the most effective strategies and baits like a true scientist.</p>
+                    <h2 class="text-4xl font-bold text-center text-[var(--text-primary)] mb-8" data-lang-key="scienceTitle">科学钓法：解密鱼儿的觅食行为</h2>
+                    <p class="text-lg text-center text-[var(--text-secondary)] max-w-3xl mx-auto mb-12" data-lang-key="scienceIntro">鱼类拥有高度发达的感官系统。了解它们如何感知世界，你就能像科学家一样选择最有效的策略和饵料。</p>
                     <div class="space-y-4">
                         <div class="science-accordion-item bg-[var(--bg-secondary)] rounded-lg shadow">
-                            <button class="science-accordion-header" data-tab="vision" data-lang-key="tabVision">👁️ Vision: Underwater Eyes</button>
+                            <button class="science-accordion-header" data-tab="vision" data-lang-key="tabVision">👁️ 视觉：水下之眼</button>
                             <div class="science-accordion-content" id="science-vision-content"></div>
                         </div>
                         <div class="science-accordion-item bg-[var(--bg-secondary)] rounded-lg shadow">
-                            <button class="science-accordion-header" data-tab="chemo" data-lang-key="tabChemo">👃 Taste & Smell</button>
+                            <button class="science-accordion-header" data-tab="chemo" data-lang-key="tabChemo">👃 味觉与嗅觉</button>
                             <div class="science-accordion-content" id="science-chemo-content"></div>
                         </div>
                         <div class="science-accordion-item bg-[var(--bg-secondary)] rounded-lg shadow">
-                            <button class="science-accordion-header" data-tab="lateral" data-lang-key="tabLateral">〰️ Lateral Line: Sixth Sense</button>
+                            <button class="science-accordion-header" data-tab="lateral" data-lang-key="tabLateral">〰️ 侧线：第六感</button>
                             <div class="science-accordion-content" id="science-lateral-content"></div>
                         </div>
                     </div>
 
                     <div class="mt-12 bg-[var(--bg-secondary)] rounded-lg shadow p-8">
-                         <h3 class="text-2xl font-bold text-center mb-6" data-lang-key="baitRecommenderTitle">Interactive Bait Recommender</h3>
-                         <p class="text-md text-center text-[var(--text-secondary)] mb-6" data-lang-key="baitRecommenderIntro">Not sure what bait to use? Select your target fish species, and let me recommend the perfect bait for you!</p>
+                         <h3 class="text-2xl font-bold text-center mb-6" data-lang-key="baitRecommenderTitle">互动式饵料推荐器</h3>
+                         <p class="text-md text-center text-[var(--text-secondary)] mb-6" data-lang-key="baitRecommenderIntro">不知道用什么饵料？选择你想要钓的目标鱼种，让我来为你推荐！</p>
                          <div class="flex flex-col items-center space-y-4">
                             <select id="fish-selector" class="p-2 border rounded-md bg-[var(--bg-main)] w-full max-w-xs text-[var(--text-primary)]">
                                 <!-- Options will be injected by JS -->
                             </select>
                             <div id="bait-recommendation" class="mt-4 p-4 bg-[var(--bg-main)] rounded-lg text-center w-full max-w-md min-h-[80px]">
-                                <p class="text-[var(--text-secondary)]" data-lang-key="selectFishPrompt">Please select a fish first...</p>
+                                <p class="text-[var(--text-secondary)]" data-lang-key="selectFishPrompt">请先选择一种鱼...</p>
                             </div>
                          </div>
                     </div>
@@ -359,40 +379,40 @@
 
                 <!-- Quiz Section -->
                 <section id="quiz" class="content-section hidden">
-                    <h2 class="text-4xl font-bold text-center text-[var(--text-primary)] mb-8" data-lang-key="quizTitle">Knowledge Quiz: Test Your Angling Smarts!</h2>
-                    <p class="text-lg text-center text-[var(--text-secondary)] max-w-3xl mx-auto mb-12" data-lang-key="quizIntro">Let's see how much you've learned about fish biology and responsible angling. Good luck!</p>
+                    <h2 class="text-4xl font-bold text-center text-[var(--text-primary)] mb-8" data-lang-key="quizTitle">知识测验：考验你的垂钓智慧！</h2>
+                    <p class="text-lg text-center text-[var(--text-secondary)] max-w-3xl mx-auto mb-12" data-lang-key="quizIntro">让我们看看你学到了多少鱼类生物学和负责任垂钓的知识。祝你好运！</p>
                     <div id="quiz-container" class="bg-[var(--bg-secondary)] rounded-lg shadow p-8 max-w-2xl mx-auto">
                         <!-- Quiz questions will be injected here by JS -->
                         <div id="quiz-questions"></div>
-                        <button id="submit-quiz" class="mt-8 w-full bg-[var(--accent)] text-white font-bold py-3 px-6 rounded-md hover:bg-[var(--accent-dark)] transition-colors duration-300" data-lang-key="submitQuiz">Submit Quiz</button>
+                        <button id="submit-quiz" class="mt-8 w-full bg-[var(--accent)] text-white font-bold py-3 px-6 rounded-md hover:bg-[var(--accent-dark)] transition-colors duration-300" data-lang-key="submitQuiz">提交测验</button>
                         <div id="quiz-results" class="mt-4 text-center text-xl font-bold hidden"></div>
                     </div>
                 </section>
 
                 <!-- Pro Tips Section -->
                 <section id="pro-tips" class="content-section hidden">
-                    <h2 class="text-4xl font-bold text-center text-[var(--text-primary)] mb-8" data-lang-key="proTipsTitle">Pro Tips: Becoming a Responsible Angler</h2>
-                     <p class="text-lg text-center text-[var(--text-secondary)] max-w-3xl mx-auto mb-12" data-lang-key="proTipsIntro">Angling is not just about skill, but also responsibility. Follow these tips to enjoy the fun while protecting our precious aquatic resources.</p>
+                    <h2 class="text-4xl font-bold text-center text-[var(--text-primary)] mb-8" data-lang-key="proTipsTitle">高手秘籍：成为负责任的垂钓者</h2>
+                     <p class="text-lg text-center text-[var(--text-secondary)] max-w-3xl mx-auto mb-12" data-lang-key="proTipsIntro">垂钓不仅是技巧，更是一份责任。遵循这些建议，享受乐趣的同时，也保护我们珍贵的水生资源。</p>
                     <div class="space-y-6 max-w-4xl mx-auto">
                         <div class="accordion-item bg-[var(--bg-secondary)] rounded-lg shadow">
                             <button class="accordion-header w-full text-left p-6 flex justify-between items-center">
-                                <span class="text-xl font-semibold text-[var(--text-primary)]" data-lang-key="onSiteProcessTitle">📝 On-site Process & What to Bring</span>
+                                <span class="text-xl font-semibold text-[var(--text-primary)]" data-lang-key="onSiteProcessTitle">📝 现场流程与建议携带</span>
                                 <span class="text-2xl transform transition-transform duration-300">+</span>
                             </button>
                             <div class="accordion-content px-6 text-[var(--text-secondary)]">
                                 <div class="py-4 border-t border-[var(--border-color)]">
-                                    <h4 class="font-bold text-lg mb-2 text-[var(--text-primary)]" data-lang-key="suggestedProcessTitle">Suggested Process</h4>
+                                    <h4 class="font-bold text-lg mb-2 text-[var(--text-primary)]" data-lang-key="suggestedProcessTitle">建议流程</h4>
                                     <ol class="list-decimal list-inside space-y-1">
-                                        <li data-lang-key="process1">Register at the counter, state it's your first time, and you can rent fishing rods.</li>
-                                        <li data-lang-key="process2">Inform staff you have children; they will arrange a suitable pond.</li>
-                                        <li data-lang-key="process3">Fish for 1–2 hours (bait can be refilled if used up).</li>
-                                        <li data-lang-key="process4">If you want to eat your catch, the kitchen can cook it for you (or pack it).</li>
+                                        <li data-lang-key="process1">到前台登记，说明是初次体验，可租用钓竿。</li>
+                                        <li data-lang-key="process2">告诉工作人员有小孩，他们会安排适合的水池。</li>
+                                        <li data-lang-key="process3">钓鱼1–2小时（鱼饵用完可续买）。</li>
+                                        <li data-lang-key="process4">钓到的鱼若想吃，可请厨房代为烹饪（或打包）。</li>
                                     </ol>
-                                    <h4 class="font-bold text-lg mt-4 mb-2 text-[var(--text-primary)]" data-lang-key="whatToBringTitle">Suggested Items to Bring</h4>
+                                    <h4 class="font-bold text-lg mt-4 mb-2 text-[var(--text-primary)]" data-lang-key="whatToBringTitle">建议携带</h4>
                                      <ul class="list-disc list-inside space-y-1">
-                                        <li data-lang-key="bring1">Sun hat / Umbrella (if weather is hot or showery).</li>
-                                        <li data-lang-key="bring2">Mosquito repellent.</li>
-                                        <li data-lang-key="bring3">Power bank (for photos + navigation).</li>
+                                        <li data-lang-key="bring1">防晒帽 / 雨伞（若天气炎热或阵雨）。</li>
+                                        <li data-lang-key="bring2">驱蚊液。</li>
+                                        <li data-lang-key="bring3">手机充电宝（拍照 + 导航）。</li>
                                     </ul>
                                 </div>
                             </div>
@@ -400,30 +420,30 @@
 
                          <div class="accordion-item bg-[var(--bg-secondary)] rounded-lg shadow">
                             <button class="accordion-header w-full text-left p-6 flex justify-between items-center">
-                                <span class="text-xl font-semibold text-[var(--text-primary)]" data-lang-key="catchReleaseTitle">💚 "Catch & Release" Best Practices</span>
+                                <span class="text-xl font-semibold text-[var(--text-primary)]" data-lang-key="catchReleaseTitle">💚 “钓后放流”最佳实践</span>
                                 <span class="text-2xl transform transition-transform duration-300">+</span>
                             </button>
                             <div class="accordion-content px-6 text-[var(--text-secondary)]">
                                 <div class="py-4 border-t border-[var(--border-color)] space-y-3">
-                                   <p data-lang-key="releaseIntro">If you choose to release, follow these steps to ensure the fish returns to the water healthy.</p>
-                                   <p><strong class="text-[var(--text-primary)]" data-lang-key="reduceAirExposureStrong">Reduce Air Exposure:</strong> <span data-lang-key="reduceAirExposureText">Try to keep the fish out of water for 10 seconds or less. Fish need water for oxygen!</span></p>
-                                   <p><strong class="text-[var(--text-primary)]" data-lang-key="wetHandsStrong">Wet Hands:</strong> <span data-lang-key="wetHandsText">Always wet your hands before touching the fish to protect its protective slime coat.</span></p>
-                                   <p><strong class="text-[var(--text-primary)]" data-lang-key="properSupportStrong">Proper Support:</strong> <span data-lang-key="properSupportText">Support the fish's body horizontally with both hands when taking it out of the water. Never hold it by its gills or jaw.</span></p>
-                                   <p><strong class="text-[var(--text-primary)]" data-lang-key="quickUnhookStrong">Quick Unhooking:</strong> <span data-lang-key="quickUnhookText">Barbless hooks and dehooking tools are recommended. If deep-hooked, cutting the line is often better.</span></p>
-                                   <p><strong class="text-[var(--text-primary)]" data-lang-key="gentleReleaseStrong">Gentle Release:</strong> <span data-lang-key="gentleReleaseText">Gently place the fish headfirst into the water, allowing water to flow over its gills.</span></p>
+                                   <p data-lang-key="releaseIntro">如果你选择放流，请遵循以下步骤，以确保鱼儿能健康地回到水中。</p>
+                                   <p><strong class="text-[var(--text-primary)]" data-lang-key="reduceAirExposureStrong">减少空气暴露：</strong> <span data-lang-key="reduceAirExposureText">尽量将鱼离开水面的时间控制在10秒内。鱼靠水获取氧气！</span></p>
+                                   <p><strong class="text-[var(--text-primary)]" data-lang-key="wetHandsStrong">湿手操作：</strong> <span data-lang-key="wetHandsText">接触鱼前务必弄湿双手，保护鱼体表的保护性黏液。</span></p>
+                                   <p><strong class="text-[var(--text-primary)]" data-lang-key="properSupportStrong">正确支撑：</strong> <span data-lang-key="properSupportText">用双手水平支撑鱼的身体，切勿抓其鳃或下颚。</span></p>
+                                   <p><strong class="text-[var(--text-primary)]" data-lang-key="quickUnhookStrong">快速摘钩：</strong> <span data-lang-key="quickUnhookText">推荐使用无倒刺钩和摘钩工具。如果钩得太深，剪断鱼线是更好的选择。</span></p>
+                                   <p><strong class="text-[var(--text-primary)]" data-lang-key="gentleReleaseStrong">温柔放流：</strong> <span data-lang-key="gentleReleaseText">将鱼头朝前轻轻放入水中，让水流过它的鳃。</span></p>
                                 </div>
                             </div>
                         </div>
 
                          <div class="accordion-item bg-[var(--bg-secondary)] rounded-lg shadow">
                             <button class="accordion-header w-full text-left p-6 flex justify-between items-center">
-                                <span class="text-xl font-semibold text-[var(--text-primary)]" data-lang-key="environmentalResponsibilityTitle">🌍 Angler's Environmental Responsibility</span>
+                                <span class="text-xl font-semibold text-[var(--text-primary)]" data-lang-key="environmentalResponsibilityTitle">🌍 垂钓者的环保责任</span>
                                 <span class="text-2xl transform transition-transform duration-300">+</span>
                             </button>
                             <div class="accordion-content px-6 text-[var(--text-secondary)]">
                                 <div class="py-4 border-t border-[var(--border-color)] space-y-3">
-                                   <p data-lang-key="environmentalResponsibilityText1">Developing "angler ethics" is a vital part of conservation efforts. By adopting best practices, even in farmed ponds, we can contribute to the health and resilience of fish populations. This fosters a sense of stewardship and responsibility, transforming a hobby into an active form of environmental conservation.</p>
-                                   <p data-lang-key="environmentalResponsibilityText2">You can even become a "citizen scientist"! By reporting your catches, sizes, and other observations, you can help managers better understand the health of the pond's fish. You are not just a participant, but a contributor to scientific and conservation efforts!</p>
+                                   <p data-lang-key="environmentalResponsibilityText1">发展“垂钓者道德”是保护工作的重要部分。通过采纳最佳实践，即使在养殖池塘，我们也能为鱼类种群的健康和恢复力做出贡献。这培养了一种管理和责任感，将一项爱好转变为积极的环境保护形式。</p>
+                                   <p data-lang-key="environmentalResponsibilityText2">你甚至可以成为一名“公民科学家”！通过报告你的渔获、尺寸等观察结果，可以帮助管理人员更好地了解鱼塘的健康状况。你不仅仅是参与者，更是科学和保护工作的贡献者！</p>
                                 </div>
                             </div>
                         </div>
@@ -439,21 +459,21 @@
     <nav class="bottom-nav md:hidden">
         <a href="#home" class="bottom-nav-item active" data-nav-section="home">
             <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg>
-            <span data-lang-key="navHome">Home</span>
+            <span data-lang-key="navHome">首页</span>
         </a>
         <a href="#science" class="bottom-nav-item" data-nav-section="science">
             <!-- Using a beaker icon for science -->
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 22h13c.8 0 1.5-.7 1.5-1.5v-13c0-.8-.7-1.5-1.5-1.5h-13c-.8 0-1.5.7-1.5 1.5v13c0 .8.7 1.5 1.5 1.5z"/><path d="M4 6h16"/><path d="M10 2v4"/><path d="M14 2v4"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/><path d="M8 16h.01"/><path d="M12 16h.01"/><path d="M16 16h.01"/></svg>
-            <span data-lang-key="navScience">Science</span>
+            <span data-lang-key="navScience">科学</span>
         </a>
         <a href="#quiz" class="bottom-nav-item" data-nav-section="quiz">
              <!-- Using a question mark icon for quiz -->
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-            <span data-lang-key="navQuiz">Quiz</span>
+            <span data-lang-key="navQuiz">测验</span>
         </a>
         <a href="#pro-tips" class="bottom-nav-item" data-nav-section="pro-tips">
             <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>
-            <span data-lang-key="navProTips">Pro Tips</span>
+            <span data-lang-key="navProTips">秘籍</span>
         </a>
     </nav>
 
@@ -481,6 +501,7 @@
                     navQuiz: "Quiz",
                     homeTitle: "Welcome to Your \"Hook & Cook\" Adventure!",
                     homeIntro: "\"Hook & Cook\" fisheries offer a unique experience: catch fish with your own hands, then immediately enjoy freshly cooked catches at the on-site restaurant. This is not just the joy of fishing, but a perfect blend of sport, nature, and gastronomy. This guide will take you deep into the mysteries of fish biology, from understanding fish senses to scientifically choosing baits, helping you grow from a casual angler into an \"angling scientist\" with a profound understanding of aquatic life. Ready to start your adventure?",
+                    rippleHint: "Tap the background for a surprise!",
                     whatIsHookCookTitle: "What is a \"Hook & Cook\" Fishery?",
                     uniqueExperienceTitle: "Unique Leisure Experience",
                     uniqueExperienceText: "These fisheries are venues specifically designed for recreational fishing, often converted from disused fish farms or purpose-built ponds, aiming to provide a unique leisure experience. Here, visitors can enjoy the thrill of fishing and choose to have their caught fish prepared by the on-site restaurant, offering a one-stop \"catch-to-cook\" service, providing an ideal fishing environment for families and beginners.",
@@ -550,6 +571,7 @@
                     navQuiz: "测验",
                     homeTitle: "欢迎来到“钓获烹饪”探险之旅！",
                     homeIntro: "“钓获烹饪”(Hook & Cook) 渔场提供了一种独特的体验：亲手钓起鱼，然后立即在现场餐厅享用新鲜烹制的渔获。这不仅是垂钓的乐趣，更是运动、自然与美食的完美结合。本指南将带你深入探索鱼类生物学的奥秘，从了解鱼的感官到科学选择饵料，让你从普通垂钓者成长为一名对水生生物有深入理解的“垂钓科学家”。准备好开始你的探险了吗？",
+                    rippleHint: "轻点背景，有惊喜！",
                     whatIsHookCookTitle: "什么是“钓获烹饪”渔场？",
                     uniqueExperienceTitle: "独特的休闲体验",
                     uniqueExperienceText: "这些渔场是专为休闲垂钓设计的场所，通常由废弃的养鱼场改造或专门建造。在这里，游客可以体验垂钓的乐趣，并将渔获交给餐厅烹饪，实现“从钓到吃”的一站式服务，为家庭和初学者提供了理想的垂钓环境。",
@@ -619,6 +641,7 @@
                     navQuiz: "Kuiz",
                     homeTitle: "Selamat Datang ke Pengembaraan \"Hook & Cook\" Anda!",
                     homeIntro: "Kolam pancing \"Hook & Cook\" menawarkan pengalaman unik: tangkap ikan dengan tangan sendiri, kemudian nikmati hasil tangkapan yang baru dimasak di restoran di lokasi. Ini bukan sahaja kegembiraan memancing, tetapi gabungan sempurna antara sukan, alam semula jadi, dan gastronomi. Panduan ini akan membawa anda menyelami misteri biologi ikan, daripada memahami deria ikan hingga memilih umpan secara saintifik, membantu anda berkembang daripada pemancing biasa menjadi \"saintis memancing\" dengan pemahaman mendalam tentang hidupan akuatik. Bersedia untuk memulakan pengembaraan anda?",
+                    rippleHint: "Ketik latar belakang untuk kejutan!",
                     whatIsHookCookTitle: "Apa itu Kolam Pancing \"Hook & Cook\"?",
                     uniqueExperienceTitle: "Pengalaman Santai Unik",
                     uniqueExperienceText: "Tempat memancing ini direka khas untuk memancing rekreasi, sering diubah suai daripada ladang ikan yang tidak digunakan atau kolam yang dibina khas, bertujuan untuk menyediakan pengalaman rekreasi yang unik. Di sini, pengunjung boleh menikmati keseronokan memancing dan memilih untuk memasak ikan yang ditangkap oleh restoran di lokasi, menawarkan perkhidmatan \"tangkap-masak\" sehenti, menyediakan persekitaran memancing yang ideal untuk keluarga dan pemula.",
@@ -1185,6 +1208,50 @@
                 quizResultsDiv.innerHTML = `<p class="text-[var(--text-primary)]">${translations[currentLanguage].yourScore} ${score} / ${quizQuestions.length}</p>`;
             }
 
+            // --- Ripple Effect for Mobile (Simulating Fishing) ---
+            function createRipple(event) {
+                // Only run on mobile viewports
+                if (!window.matchMedia("(max-width: 767px)").matches) return;
+
+                // Define tags that should not trigger the ripple
+                const nonRippleTags = ['BUTTON', 'A', 'INPUT', 'SELECT', 'LABEL', 'CANVAS', 'svg', 'path'];
+
+                let targetElement = event.target;
+                // Check if the tapped element or any of its parents are non-ripple elements or have specific interactive classes
+                while (targetElement && targetElement !== document.body) {
+                    if (nonRippleTags.includes(targetElement.tagName.toUpperCase()) ||
+                        targetElement.classList.contains('quiz-option') ||
+                        targetElement.classList.contains('accordion-header') ||
+                        targetElement.classList.contains('science-accordion-header') ||
+                        targetElement.classList.contains('modal-content') ||
+                        targetElement.hasAttribute('data-nav-section')
+                       ) {
+                        return; // Exit if it's an interactive element
+                    }
+                    targetElement = targetElement.parentElement;
+                }
+
+                const ripple = document.createElement("span");
+                ripple.classList.add("ripple");
+
+                // Get touch coordinates relative to the document
+                const x = event.touches[0].pageX;
+                const y = event.touches[0].pageY;
+                const size = 100; // Ripple size in pixels
+
+                // Position the ripple centered on the touch point
+                ripple.style.width = ripple.style.height = `${size}px`;
+                ripple.style.left = `${x - size / 2}px`;
+                ripple.style.top = `${y - size / 2}px`;
+
+                document.body.appendChild(ripple);
+
+                // Clean up the ripple element after the animation finishes
+                setTimeout(() => {
+                    ripple.remove();
+                }, 800); // Must match the animation duration in CSS
+            }
+
             // --- Event Listeners ---
             window.addEventListener('hashchange', () => updateContent(window.location.hash));
             [...navLinks, ...bottomNavItems].forEach(link => {
@@ -1230,10 +1297,13 @@
                 });
             });
             document.getElementById('submit-quiz').addEventListener('click', submitQuiz);
+            // Attach the event listener to the body for the ripple effect
+            document.body.addEventListener('touchstart', createRipple, { passive: true });
+
 
             // --- Initial Load ---
             initFishChart();
-            const initialLang = localStorage.getItem('language') || 'en';
+            const initialLang = localStorage.getItem('language') || 'zh'; // Default to Chinese
             updateLanguage(initialLang);
             updateContent(window.location.hash || '#home');
 
