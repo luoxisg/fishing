@@ -175,11 +175,11 @@
                     <h2 class="text-4xl font-bold text-center text-[var(--text-primary)] mb-8" data-lang-key="scienceTitle">The Science of Fishing: Unraveling Fish Feeding Behavior</h2>
                     <p class="text-lg text-center text-[var(--text-secondary)] max-w-3xl mx-auto mb-12" data-lang-key="scienceIntro">Fish possess highly developed sensory systems. Understanding how they perceive the world will allow you to choose the most effective strategies and baits like a true scientist.</p>
                     <div class="bg-white rounded-lg shadow p-8">
-                        <div class="border-b border-gray-200 overflow-x-auto whitespace-nowrap pb-2 scrollbar-hide">
-                            <nav id="science-tabs" class="flex space-x-4 md:space-x-6">
-                                <button data-tab="vision" class="tab active whitespace-nowrap py-4 px-1 border-b-2 font-medium text-lg" data-lang-key="tabVision">👁️ Vision: Underwater Eyes</button>
-                                <button data-tab="chemo" class="tab whitespace-nowrap py-4 px-1 border-b-2 font-medium text-lg" data-lang-key="tabChemo">👃 Taste & Smell</button>
-                                <button data-tab="lateral" class="tab whitespace-nowrap py-4 px-1 border-b-2 font-medium text-lg" data-lang-key="tabLateral">〰️ Lateral Line: Sixth Sense</button>
+                        <div class="border-b border-gray-200">
+                            <nav id="science-tabs" class="flex flex-col md:flex-row md:space-x-6 space-y-2 md:space-y-0">
+                                <button data-tab="vision" class="tab active whitespace-nowrap py-4 px-1 border-b-2 font-medium text-lg text-left" data-lang-key="tabVision">👁️ Vision: Underwater Eyes</button>
+                                <button data-tab="chemo" class="tab whitespace-nowrap py-4 px-1 border-b-2 font-medium text-lg text-left" data-lang-key="tabChemo">👃 Taste & Smell</button>
+                                <button data-tab="lateral" class="tab whitespace-nowrap py-4 px-1 border-b-2 font-medium text-lg text-left" data-lang-key="tabLateral">〰️ Lateral Line: Sixth Sense</button>
                             </nav>
                         </div>
                         <div id="science-content" class="mt-8">
@@ -448,21 +448,21 @@
                     pacuDetails: `
                         <p><strong class="text-[var(--text-primary)]">科学分类：</strong> 锯脂鲤科。常见属包括 *Colossoma* 和 *Piaractus*。</p>
                         <p><strong class="text-[var(--text-primary)]">栖息地与行为：</strong> 喜欢河流、湖泊和洪泛区。在池塘中，它们可以长到很大，体重可达5公斤以上。性情温和，不具攻击性。</p>
-                        <p><strong class="text-[var(--text-primary)]">食性与摄食习惯：</strong> 主要为杂食性，但偏爱植物，特别是水果、种子和坚果。它们强大的咀嚼系统专门用于处理植物性食物。</p>
+                        <p><strong class="text-[var(--text-primary)]">食性与摄食习惯：：</strong> 主要为杂食性，但偏爱植物，特别是水果、种子和坚果。它们强大的咀嚼系统专门用于处理植物性食物。</p>
                     `,
                     tilapiaName: "罗非鱼 (Tilapia)",
                     tilapiaDesc: "原产于非洲，生命力顽强，易于驯化，是水产养殖的常见鱼种。",
                     tilapiaDetails: `
                         <p><strong class="text-[var(--text-primary)]">科学分类：</strong> 口孵非鲫属，例如尼罗罗非鱼。</p>
                         <p><strong class="text-[var(--text-primary)]">栖息地与行为：：</strong> 栖息于浅溪、池塘、河流和湖泊。因其广泛引入而被视为全球最具侵略性的外来物种之一。</p>
-                        <p><strong class="text-[var(--text-primary)]">食性与摄食习惯：</strong> 主要是草食性，以浮游生物、藻类和其他植物为食。幼年时也可能捕食蠕虫和小鱼。</p>
+                        <p><strong class="text-[var(--text-primary)]">食性与摄食习惯：：</strong> 主要是草食性，以浮游生物、藻类和其他植物为食。幼年时也可能捕食蠕虫和小鱼。</p>
                     `,
                     catfishName: "鲶鱼 (Catfish)",
                     catfishDesc: "通常是捕食性鱼类，食欲旺盛，上钩后搏斗力强劲，对强烈气味极感兴趣。",
                     catfishDetails: `
                         <p><strong class="text-[var(--text-primary)]">科学分类：</strong> 鲶形目。常见种类包括博尔鲶鱼和条纹鲶鱼。红尾鲶和湄公鲶也很常见。</p>
                         <p><strong class="text-[var(--text-primary)]">栖息地与行为：：</strong> 生活在湖泊和河流的深水区和底部。以其强劲的搏斗而闻名。</p>
-                        <p><strong class="text-[var(--text-primary)]">食性与摄食习惯：</strong> 捕食性鱼类，主要以其他鱼类为食。食欲旺盛，对强烈气味（如鸡肝）表现出极大兴趣。</p>
+                        <p><strong class="text-[var(--text-primary)]">食性与摄食习惯：：</strong> 捕食性鱼类，主要以其他鱼类为食。食欲旺盛，对强烈气味（如鸡肝）表现出极大兴趣。</p>
                     `,
                     barramundiName: "尖吻鲈 (Barramundi)",
                     barramundiDesc: "机会主义捕食者，大部分时间生活在淡水中，但会洄游到咸水繁殖。喜欢躲藏在遮蔽物下。",
@@ -495,7 +495,7 @@
                     lateralTitle: "〰️ 侧线：第六感",
                     lateralContent: `
                          <p class="mb-4">侧线是鱼身体两侧的一排感觉器官，能探测到水中的振动和压力变化。这是鱼的“第六感”，让它们在看不清的情况下也能感知到猎物、障碍物或捕食者。</p>
-                         <p><strong>应用：</strong> 拟饵的<strong>动作</strong>和它在水中产生的<strong>振动</strong>，其重要性不亚于颜色和气味。能模仿受伤小鱼挣扎或昆虫游动所产生振动的拟饵，能有效触发鱼的攻击欲望，尤其是在浑水或夜钓时。</p>
+                         <p><strong>应用：：</strong> 拟饵的<strong>动作</strong>和它在水中产生的<strong>振动</strong>，其重要性不亚于颜色和气味。能模仿受伤小鱼挣扎或昆虫游动所产生振动的拟饵，能有效触发鱼的攻击欲望，尤其是在浑水或夜钓时。</p>
                     `
                 }
             };
