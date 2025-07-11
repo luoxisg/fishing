@@ -9,22 +9,21 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* ==========================================================================
-        WORLD-CLASS UPGRADE V8 - NAVIGATION RESTRUCTURE
-        ==========================================================================
-        1.  **Navigation Restructure:** "Bait Science" and "Rod Selection" are now
-            promoted to top-level navigation items, parallel to "Home", "Science", etc.
-            This improves information architecture and makes these key guides more
-            accessible.
-        2.  **HTML & JS Updates:**
-            - Both desktop sidebar and mobile bottom navigation have been updated
-              to include the new links.
-            - New content sections (`#bait-science`, `#rod-selection`) have been created.
-            - Content has been moved from the "Pro Tips" accordion to these new sections.
-            - Translation keys and logic have been updated to support the new structure.
-        3.  **Mobile Navigation:** The bottom navigation now accommodates more items,
-            with icons and text adjusted for clarity on smaller screens.
-        ==========================================================================
-        */
+         * WORLD-CLASS UPGRADE V9 - MOBILE RESPONSIVENESS ENHANCEMENTS
+         * ==========================================================================
+         * 1.  **Mobile Navigation Fix:** The bottom navigation bar was not displaying
+         * correctly. Flexbox properties have been added via Tailwind classes
+         * to ensure the six items distribute evenly and are easy to tap on
+         * all mobile screen sizes.
+         * 2.  **CSS @apply Fix:** The custom styles for the "Pro Tips" table used
+         * `@apply`, which does not work in a browser-rendered environment.
+         * These have been converted to standard CSS properties, restoring the
+         * intended table layout and design.
+         * 3.  **General Review:** A full review was conducted to ensure all elements
+         * like cards, modals, and typography scale correctly on mobile devices,
+         * leveraging Tailwind's responsive prefixes.
+         * ==========================================================================
+         */
 
         :root {
             --bg-main-start: #0d122e;
@@ -219,21 +218,25 @@
         .quiz-option.correct { background-color: rgba(40, 167, 69, 0.5); }
         .quiz-option.incorrect { background-color: rgba(220, 53, 69, 0.5); }
         
-        /* Pro Tips Table */
+        /* Pro Tips Table - FIXED: Replaced non-functional @apply with standard CSS */
         .pro-tips-table {
-            @apply w-full text-left mt-6;
+            width: 100%;
+            text-align: left;
+            margin-top: 1.5rem;
         }
         .pro-tips-table th, .pro-tips-table td {
-            @apply p-3 border-b border-[var(--border-glass)];
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-glass);
         }
         .pro-tips-table th {
-            @apply font-semibold text-white;
+            font-weight: 600;
+            color: white;
         }
         .pro-tips-table td {
-            @apply text-gray-300;
+            color: #d1d5db; /* Equivalent to text-gray-300 */
         }
         .pro-tips-table tr:last-child td {
-            @apply border-b-0;
+            border-bottom: 0;
         }
 
     </style>
@@ -340,12 +343,12 @@
                          <h3 class="text-3xl font-bold text-center mb-6" data-lang-key="baitRecommenderTitle">互动式饵料推荐器</h3>
                          <p class="text-md text-center text-gray-300 mb-6" data-lang-key="baitRecommenderIntro">不知道用什么饵料？选择你想要钓的目标鱼种，让我来为你推荐！</p>
                          <div class="flex flex-col items-center space-y-4">
-                            <select id="fish-selector" class="p-3 border rounded-lg bg-gray-900 w-full max-w-xs text-white glass-ui">
-                                <!-- Options will be injected here by JS -->
-                            </select>
-                            <div id="bait-recommendation" class="mt-4 p-4 bg-gray-900/50 rounded-lg text-center w-full max-w-md min-h-[80px]">
-                                <p class="text-gray-400" data-lang-key="selectFishPrompt">请先选择一种鱼...</p>
-                            </div>
+                             <select id="fish-selector" class="p-3 border rounded-lg bg-gray-900 w-full max-w-xs text-white glass-ui">
+                                 <!-- Options will be injected here by JS -->
+                             </select>
+                             <div id="bait-recommendation" class="mt-4 p-4 bg-gray-900/50 rounded-lg text-center w-full max-w-md min-h-[80px]">
+                                 <p class="text-gray-400" data-lang-key="selectFishPrompt">请先选择一种鱼...</p>
+                             </div>
                          </div>
                     </div>
                 </section>
@@ -428,28 +431,29 @@
     </div>
 
     <!-- Fixed Bottom Navigation for Mobile -->
-    <nav class="bottom-nav md:hidden">
-        <a href="#home" class="bottom-nav-item active" data-nav-section="home">
+    <!-- FIXED: Added flexbox classes to ensure proper layout on mobile devices -->
+    <nav class="bottom-nav md:hidden fixed bottom-0 left-0 right-0 z-20 flex justify-around items-center">
+        <a href="#home" class="bottom-nav-item active flex-1 flex flex-col items-center justify-center" data-nav-section="home">
             <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg>
             <span data-lang-key="navHome">首页</span>
         </a>
-        <a href="#science" class="bottom-nav-item" data-nav-section="science">
+        <a href="#science" class="bottom-nav-item flex-1 flex flex-col items-center justify-center" data-nav-section="science">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 22h13c.8 0 1.5-.7 1.5-1.5v-13c0-.8-.7-1.5-1.5-1.5h-13c-.8 0-1.5.7-1.5 1.5v13c0 .8.7 1.5 1.5 1.5z"/><path d="M4 6h16"/><path d="M10 2v4"/><path d="M14 2v4"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/><path d="M8 16h.01"/><path d="M12 16h.01"/><path d="M16 16h.01"/></svg>
             <span data-lang-key="navScience">科学</span>
         </a>
-        <a href="#bait-science" class="bottom-nav-item" data-nav-section="bait-science">
+        <a href="#bait-science" class="bottom-nav-item flex-1 flex flex-col items-center justify-center" data-nav-section="bait-science">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-fish"><path d="M6.5 12c.9 0 1.6.3 2.2.8.6.5.9 1.2.9 2.2s-.3 1.7-.9 2.2c-.6.5-1.3.8-2.2.8s-1.6-.3-2.2-.8C3.7 16.7 3.4 16 3.4 15s.3-1.7.9-2.2c.6-.5 1.3-.8 2.2-.8z"/><path d="m21.6 12.2-7.4-7.4C13.6 4.2 12.8 4 12 4s-1.6.2-2.2.8L2.4 12.2c-.6.6-.8 1.3-.8 2.2s.2 1.6.8 2.2l7.4 7.4c.6.6 1.3.8 2.2.8s1.6-.2 2.2-.8l7.4-7.4c.6-.6.8-1.3.8-2.2s-.2-1.6-.8-2.2z"/></svg>
             <span data-lang-key="navBaitScience">鱼饵</span>
         </a>
-        <a href="#rod-selection" class="bottom-nav-item" data-nav-section="rod-selection">
+        <a href="#rod-selection" class="bottom-nav-item flex-1 flex flex-col items-center justify-center" data-nav-section="rod-selection">
              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-grip-vertical"><circle cx="9" cy="12" r="1" /><circle cx="9" cy="5" r="1" /><circle cx="9" cy="19" r="1" /><circle cx="15" cy="12" r="1" /><circle cx="15" cy="5" r="1" /><circle cx="15" cy="19" r="1" /></svg>
             <span data-lang-key="navRodSelection">鱼竿</span>
         </a>
-        <a href="#quiz" class="bottom-nav-item" data-nav-section="quiz">
+        <a href="#quiz" class="bottom-nav-item flex-1 flex flex-col items-center justify-center" data-nav-section="quiz">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
             <span data-lang-key="navQuiz">测验</span>
         </a>
-        <a href="#pro-tips" class="bottom-nav-item" data-nav-section="pro-tips">
+        <a href="#pro-tips" class="bottom-nav-item flex-1 flex flex-col items-center justify-center" data-nav-section="pro-tips">
             <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>
             <span data-lang-key="navProTips">秘籍</span>
         </a>
