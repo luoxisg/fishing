@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -171,10 +171,24 @@
         }
         .modal-content {
             transition: transform 0.3s ease;
-            background-color: var(--bg-secondary); /* Modal uses secondary background */
-            color: var(--text-primary); /* Modal text is primary */
-            border: 1px solid var(--border-color);
+            background-color: white; /* Modal uses white background */
+            color: var(--text-primary-dark); /* Modal text is dark primary */
+            border: 1px solid var(--border-color-light); /* Modal border is light */
+            font-family: 'Inter', sans-serif; /* Ensure font is applied */
         }
+        .modal-content h3 {
+            color: var(--text-primary-dark); /* Ensure modal title is dark */
+            font-family: 'Inter', sans-serif; /* Ensure font is applied */
+        }
+        .modal-content strong {
+            color: var(--text-primary-dark); /* Ensure strong text is dark */
+            font-family: 'Inter', sans-serif; /* Ensure font is applied */
+        }
+        .modal-content p {
+            color: var(--text-secondary-dark); /* Ensure paragraph text is dark secondary */
+            font-family: 'Inter', sans-serif; /* Ensure font is applied */
+        }
+
         .chart-container {
             position: relative;
             width: 100%;
@@ -1035,7 +1049,7 @@
                     description: {
                         en: "Demersal predatory fish with a broad diet, an important cultured fish in Malaysia.",
                         zh: "底栖捕食性鱼类，食谱广泛，是马来西亚重要的养殖鱼类。",
-                        ml: "Ikan pemangsa demersal dengan diet yang luas, ikan ternakan penting di Malaysia."
+                        ml: "Ikan pemangsa demersal with a broad diet, an important cultured fish in Malaysia."
                     },
                     details: {
                         en: `<p><strong class="text-[var(--text-primary)]">Scientific Classification:</strong> Family Lutjanidae. Common species include John's Snapper and Mangrove Red Snapper.</p><p><strong class="text-[var(--text-primary)]">Habitat and Behavior:</strong> Juveniles live in estuaries, adults prefer coral reefs and rocky areas but also forage in sandy areas.</p><p><strong class="text-[var(--text-primary)]">Diet and Feeding Habits:</strong> Demersal predators, mainly feeding on crabs, shrimp, fish, and other invertebrates.</p>`,
@@ -1158,7 +1172,7 @@
             const languageSwitcherButtonsDesktop = document.querySelectorAll('#language-switcher-desktop .lang-button');
             const languageSwitcherButtonsMobile = document.querySelectorAll('#language-switcher-mobile .lang-button');
 
-            let fishChart; // Declare chart variable globally
+            let fishChartInstance = null; // Changed to fishChartInstance to avoid conflict with global fishChart
 
             // Define a set of vibrant colors for the chart datasets (more distinct)
             const chartDatasetColors = [
@@ -1249,40 +1263,8 @@
                 // Update bait recommender options and prompt
                 renderBaitRecommender();
 
-                // Update chart labels
-                if (fishChart) {
-                    fishChart.data.labels = [
-                        translations[lang].chartLabelDiet,
-                        translations[lang].chartLabelFight,
-                        translations[lang].chartLabelHabitat
-                    ];
-                    // Update dataset labels as well
-                    fishChart.data.datasets.forEach((dataset, index) => {
-                        const fishKey = Object.keys(fishData)[index];
-                        dataset.label = fishData[fishKey].name[currentLanguage];
-                        // Apply chart colors dynamically
-                        const color = chartDatasetColors[index % chartDatasetColors.length];
-                        dataset.backgroundColor = color.background;
-                        dataset.borderColor = color.border;
-                        dataset.pointBackgroundColor = color.border;
-                        dataset.pointBorderColor = 'white';
-                        dataset.pointHoverBackgroundColor = 'white';
-                        dataset.pointHoverBorderColor = color.border;
-                    });
-                    // Ensure chart grid and point labels are visible on dark background
-                    fishChart.options.scales.r.grid.color = 'rgba(0, 0, 0, 0.3)'; /* Darker grid lines for white background */
-                    fishChart.options.scales.r.angleLines.color = 'rgba(0, 0, 0, 0.4)'; /* Darker angle lines for white background */
-                    fishChart.options.scales.r.pointLabels.color = 'var(--text-primary-dark)'; /* Ensure point labels are visible */
-                    fishChart.options.plugins.legend.labels.color = 'var(--text-primary-dark)'; /* Ensure legend labels are visible */
-                    fishChart.options.plugins.tooltip.titleColor = 'var(--text-primary-dark)'; /* Ensure tooltip title is visible */
-                    fishChart.options.plugins.tooltip.bodyColor = 'var(--text-primary-dark)'; /* Ensure tooltip body is visible */
-                    fishChart.options.plugins.tooltip.backgroundColor = 'white'; /* Ensure tooltip background matches theme */
-                    fishChart.options.plugins.tooltip.borderColor = 'var(--border-color-light)'; /* Ensure tooltip border matches theme */
-                    fishChart.options.plugins.tooltip.borderWidth = 1;
-
-
-                    fishChart.update();
-                }
+                // Re-create chart on language update
+                renderFishChart();
 
                 // Update language switcher buttons active state
                 [...languageSwitcherButtonsDesktop, ...languageSwitcherButtonsMobile].forEach(button => {
@@ -1434,6 +1416,98 @@
                 }
 
                 quizResultsDiv.innerHTML = `<p class="text-[var(--text-primary)]">${translations[currentLanguage].yourScore} ${score} / ${quizQuestions.length}</p>`;
+            }
+
+            // --- Chart Rendering Function ---
+            function renderFishChart() {
+                const ctx = document.getElementById('fish-chart').getContext('2d');
+
+                // Destroy existing chart instance if it exists
+                if (fishChartInstance) {
+                    fishChartInstance.destroy();
+                }
+
+                fishChartInstance = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: [
+                            translations[currentLanguage].chartLabelDiet,
+                            translations[currentLanguage].chartLabelFight,
+                            translations[currentLanguage].chartLabelHabitat
+                        ],
+                        datasets: Object.values(fishData).map((fish, index) => {
+                            const color = chartDatasetColors[index % chartDatasetColors.length];
+                            return {
+                                label: fish.name[currentLanguage],
+                                data: [fish.chartData.diet, fish.chartData.fight, fish.chartData.habitat],
+                                fill: true,
+                                backgroundColor: color.background,
+                                borderColor: color.border,
+                                pointBackgroundColor: color.border,
+                                pointBorderColor: 'white',
+                                pointHoverBackgroundColor: 'white',
+                                pointHoverBorderColor: color.border
+                            };
+                        })
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                angleLines: {
+                                    display: true,
+                                    color: 'rgba(0, 0, 0, 0.4)' // Darker angle lines for white background
+                                },
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.3)' // Darker grid lines for white background
+                                },
+                                suggestedMin: 0,
+                                suggestedMax: 5,
+                                pointLabels: {
+                                    font: {
+                                        size: 14
+                                    },
+                                    color: 'var(--text-primary-dark)' // Ensure point labels are visible on white background
+                                },
+                                ticks: {
+                                    stepSize: 1,
+                                    display: false // Hide numbers on the radar axis
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    color: 'var(--text-primary-dark)', // Ensure legend labels are visible on white background
+                                    font: {
+                                        size: 14
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'white', // Tooltip background
+                                titleColor: 'var(--text-primary-dark)', // Tooltip title color
+                                bodyColor: 'var(--text-secondary-dark)', // Tooltip body color
+                                borderColor: 'var(--border-color-light)', // Tooltip border color
+                                borderWidth: 1,
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.r !== null) {
+                                            label += context.parsed.r;
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
             }
 
             // --- Event Listeners ---
